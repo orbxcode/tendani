@@ -63,6 +63,7 @@ export default function JoinTeamPage() {
       </header>
       <main className="flex-1">
         {/* Hero Section */}
+        {/* An image slider should be used as a background */}
         <section className="relative w-full py-12 md:py-24 lg:py-32">
           <div className="absolute inset-0 z-0">
             <Image

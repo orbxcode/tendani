@@ -138,7 +138,7 @@ export default function HomePage() {
             <Tabs defaultValue="all" className="mt-8">
               <div className="flex justify-center">
                 <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
+                  <TabsTrigger value="all" >All</TabsTrigger>
                   <TabsTrigger value="sale">For Sale</TabsTrigger>
                   <TabsTrigger value="rent">For Rent</TabsTrigger>
                 </TabsList>

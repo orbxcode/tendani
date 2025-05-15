@@ -180,7 +180,7 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-bold">Trusted Experience</h3>
                   <p className="text-sm text-muted-foreground">
-                    With over 20 years in the industry, we bring unparalleled expertise to every transaction.
+                    With years in the industry, we bring unparalleled expertise to every transaction.
                   </p>
                 </CardContent>
               </Card>

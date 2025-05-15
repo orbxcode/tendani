@@ -88,7 +88,7 @@ export default function SwapPropertyPage() {
                 </div>
                 <h3 className="text-xl font-bold">Get Matched</h3>
                 <p className="text-muted-foreground">
-                  Our team will review your submission and match you with potential swap opportunities from our
+                  Our team and AI agent will review your submission and match you with potential swap opportunities from our
                   database.
                 </p>
               </div>
