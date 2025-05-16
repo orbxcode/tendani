@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { getServerSideURL } from './utilities/getURL'
+import { About } from './collections/About'
+import { ClientTestimonial } from './collections/ClientTestimonial'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,7 +54,7 @@ export default buildConfig({
       }
   }),
   // database-adapter-config-end
-  collections: [Users, Media],
+  collections: [Users, About, ClientTestimonial, Media],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [
     

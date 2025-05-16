@@ -76,7 +76,7 @@ export default function AboutPage() {
               </div>
               <div className="flex justify-center">
                 <Image
-                  src="/placeholder.svg?height=600&width=600"
+                  src="/media/avatar.jpg"
                   alt="Tendani - Property Expert"
                   width={500}
                   height={500}
@@ -334,7 +334,7 @@ export default function AboutPage() {
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/properties">Browse Properties</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+                <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
                   <Link href="/contact">Contact Us</Link>
                 </Button>
               </div>

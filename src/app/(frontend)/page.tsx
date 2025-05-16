@@ -309,7 +309,7 @@ export default function HomePage() {
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/properties">Buy or Rent Now</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+                <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
                   <Link href="/join-team">Join Our Agent Network</Link>
                 </Button>
               </div>
