@@ -6,6 +6,7 @@ import { Building, ArrowRight, Repeat } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SwapPropertyForm } from "@/components/swap-property-form"
 import { MobileMenu } from "@/components/mobile-menu"
+import Footer from "@/components/Footer"
 
 export default function SwapPropertyPage() {
   return (
@@ -129,7 +130,7 @@ export default function SwapPropertyPage() {
                 </div>
                 <div className="aspect-video relative overflow-hidden rounded-lg">
                   <Image
-                    src="/placeholder.svg?height=500&width=800"
+                    src="/media/jointeam1.jpg"
                     alt="Property Swap"
                     fill
                     className="object-cover"
@@ -446,7 +447,7 @@ export default function SwapPropertyPage() {
                 <Button asChild size="lg" variant="secondary">
                   <Link href="#swap-form">Submit Your Property</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+                <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
                   <Link href="/properties">Browse Swap Properties</Link>
                 </Button>
               </div>
@@ -454,33 +455,7 @@ export default function SwapPropertyPage() {
           </div>
         </section>
       </main>
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex flex-col items-center gap-2 md:items-start">
-            <Link href="/" className="flex items-center gap-2 font-bold">
-              <Building className="h-5 w-5" />
-              <span>Tendani Properties</span>
-            </Link>
-            <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Tendani Properties. All rights reserved.
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/about" className="text-sm hover:underline">
-              About Us
-            </Link>
-            <Link href="/contact" className="text-sm hover:underline">
-              Contact Us
-            </Link>
-            <Link href="/privacy" className="text-sm hover:underline">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-sm hover:underline">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { Building, CheckCircle2, Users, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { AgentApplicationForm } from "@/components/agent-application-form"
+import Footer from "@/components/Footer"
 
 export default function JoinTeamPage() {
   return (
@@ -67,7 +68,7 @@ export default function JoinTeamPage() {
         <section className="relative w-full py-12 md:py-24 lg:py-32">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/placeholder.svg?height=1080&width=1920"
+              src="/media/jointeam.png"
               alt="Real estate team"
               fill
               className="object-cover brightness-[0.6]"
@@ -335,7 +336,7 @@ export default function JoinTeamPage() {
               </div>
               <div className="flex justify-center">
                 <Image
-                  src="/placeholder.svg?height=600&width=600"
+                  src="/media/candidate.jpg"
                   alt="Real Estate Team"
                   width={500}
                   height={500}
@@ -452,7 +453,7 @@ export default function JoinTeamPage() {
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center space-y-4">
                     <Image
-                      src="/placeholder.svg?height=200&width=200"
+                      src="/media/avatar.jpg"
                       alt="Agent"
                       width={80}
                       height={80}
@@ -475,7 +476,7 @@ export default function JoinTeamPage() {
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center space-y-4">
                     <Image
-                      src="/placeholder.svg?height=200&width=200"
+                      src="/media/avatar.jpg"
                       alt="Agent"
                       width={80}
                       height={80}
@@ -498,7 +499,7 @@ export default function JoinTeamPage() {
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center space-y-4">
                     <Image
-                      src="/placeholder.svg?height=200&width=200"
+                      src="/media/avatar.jpg"
                       alt="Agent"
                       width={80}
                       height={80}
@@ -590,10 +591,10 @@ export default function JoinTeamPage() {
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button asChild size="lg" variant="secondary">
+                <Button asChild size="lg" variant="destructive">
                   <a href="#apply">Apply Now</a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+                <Button asChild size="lg" variant="secondary" className="text-white border-white hover:bg-white/10">
                   <Link href="/contact">Contact Us</Link>
                 </Button>
               </div>
@@ -601,33 +602,7 @@ export default function JoinTeamPage() {
           </div>
         </section>
       </main>
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex flex-col items-center gap-2 md:items-start">
-            <Link href="/" className="flex items-center gap-2 font-bold">
-              <Building className="h-5 w-5" />
-              <span>Tendani Properties</span>
-            </Link>
-            <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Tendani Properties. All rights reserved.
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/about" className="text-sm hover:underline">
-              About Us
-            </Link>
-            <Link href="/contact" className="text-sm hover:underline">
-              Contact Us
-            </Link>
-            <Link href="/privacy" className="text-sm hover:underline">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-sm hover:underline">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

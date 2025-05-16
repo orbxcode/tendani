@@ -9,6 +9,7 @@ import { TestimonialCard } from "@/components/testimonial-card"
 import { MobileMenu } from "@/components/mobile-menu"
 import { PropertySearch } from "@/components/property-search"
 import { Logo } from "@/components/logo"
+import Footer from "@/components/Footer"
 
 export default function HomePage() {
   return (
@@ -58,7 +59,7 @@ export default function HomePage() {
         <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/placeholder.svg?height=1080&width=1920"
+              src="/media/hero3.jpg"
               alt="South African property landscape"
               fill
               className="object-cover brightness-[0.6]"
@@ -82,10 +83,10 @@ export default function HomePage() {
               <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
                 <Link href="/properties?type=rent">Browse Properties for Rent</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+              <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
                 <Link href="/sell">Sell Your Property</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+              <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
                 <Link href="/swap-property">Swap Your Property</Link>
               </Button>
             </div>
@@ -114,7 +115,7 @@ export default function HomePage() {
             </div>
             <div className="flex items-center justify-center">
               <Image
-                src="/placeholder.svg?height=600&width=600"
+                src="/media/hero.jpg"
                 alt="Tendani - Property Expert"
                 width={400}
                 height={400}
@@ -316,30 +317,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex flex-col items-center gap-2 md:items-start">
-            <Logo className="text-base" />
-            <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Tendani Properties. All rights reserved.
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/about" className="text-sm hover:underline">
-              About Us
-            </Link>
-            <Link href="/contact" className="text-sm hover:underline">
-              Contact Us
-            </Link>
-            <Link href="/privacy" className="text-sm hover:underline">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-sm hover:underline">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+     <Footer />
     </div>
   )
 }
