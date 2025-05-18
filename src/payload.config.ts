@@ -4,6 +4,7 @@ import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
+import { webpackBundler } from '@payloadcms/bundler-webpack'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -15,6 +16,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     components: {},
     importMap: {
@@ -43,6 +45,7 @@ export default buildConfig({
         },
       ],
     },
+    bundler: webpackBundler(),
   },
 
   // database-adapter-config-start
@@ -57,6 +60,11 @@ export default buildConfig({
   plugins: [],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
+  upload: {
+    limits: {
+      fileSize: 5000000, // 5MB
+    },
+  },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

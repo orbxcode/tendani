@@ -11,8 +11,36 @@ import { PropertySearch } from '@/components/property-search'
 import { Logo } from '@/components/logo'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { getProperties } from './properties/actions'
+import { Key } from 'react'
 
-export default function HomePage() {
+async function getFeaturedProperties(type?: string) {
+  const where: any = {
+    status: {
+      equals: 'available',
+    },
+  }
+
+  if (type && type !== 'all') {
+    where.transactionType = {
+      equals: type,
+    }
+  }
+
+  const response = await getProperties({
+    limit: 3,
+    where,
+    sort: '-createdAt',
+  })
+
+  return response.docs
+}
+
+export default async function HomePage() {
+  const allProperties = await getFeaturedProperties()
+  const saleProperties = await getFeaturedProperties('sale')
+  const rentProperties = await getFeaturedProperties('rent')
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -122,104 +150,59 @@ export default function HomePage() {
               </div>
               <TabsContent value="all" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <PropertyCard
-                    title="Luxury Apartment in Cape Town"
-                    price="R 2,950,000"
-                    location="Cape Town, Western Cape"
-                    beds={2}
-                    baths={2}
-                    size="120 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Modern Family Home in Johannesburg"
-                    price="R 4,500,000"
-                    location="Sandton, Johannesburg"
-                    beds={4}
-                    baths={3}
-                    size="280 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Beachfront Villa in Durban"
-                    price="R 18,000 /month"
-                    location="Umhlanga, Durban"
-                    beds={3}
-                    baths={2}
-                    size="200 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="rent"
-                  />
+                  {allProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
+                    <PropertyCard
+                      key={property.id?.toString()}
+                      id={property.id?.toString()}
+                      title={property.title}
+                      price={property.price}
+                      location={`${property.location.city}, ${property.location.province}`}
+                      beds={property.features.bedrooms}
+                      baths={property.features.bathrooms}
+                      size={property.features.size.toString()}
+                      image={property.images[0]?.image?.url || '/placeholder.svg'} 
+                      type={property.transactionType as "sale" | "rent" | "swap"}
+                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
+                    />
+                  ))}
                 </div>
               </TabsContent>
               <TabsContent value="sale" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <PropertyCard
-                    title="Luxury Apartment in Cape Town"
-                    price="R 2,950,000"
-                    location="Cape Town, Western Cape"
-                    beds={2}
-                    baths={2}
-                    size="120 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Modern Family Home in Johannesburg"
-                    price="R 4,500,000"
-                    location="Sandton, Johannesburg"
-                    beds={4}
-                    baths={3}
-                    size="280 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Penthouse with Ocean Views"
-                    price="R 8,750,000"
-                    location="Sea Point, Cape Town"
-                    beds={3}
-                    baths={3}
-                    size="220 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
+                  {saleProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
+                    <PropertyCard
+                      key={property.id?.toString()?.toString()?.toString()}
+                      id={property.id?.toString()?.toString()?.toString()}
+                      title={property.title}
+                      price={property.price}
+                      location={`${property.location.city}, ${property.location.province}`}
+                      beds={property.features.bedrooms}
+                      baths={property.features.bathrooms}
+                      size={property.features.size.toString()}
+                      image={property.images[0]?.image?.url || '/placeholder.svg'}
+                      type={property.transactionType as "sale" | "rent" | "swap"}
+                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
+                    />
+                  ))}
                 </div>
               </TabsContent>
               <TabsContent value="rent" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <PropertyCard
-                    title="Beachfront Villa in Durban"
-                    price="R 18,000 /month"
-                    location="Umhlanga, Durban"
-                    beds={3}
-                    baths={2}
-                    size="200 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="rent"
-                  />
-                  <PropertyCard
-                    title="Modern Apartment in Pretoria"
-                    price="R 12,500 /month"
-                    location="Hatfield, Pretoria"
-                    beds={2}
-                    baths={1}
-                    size="85 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="rent"
-                  />
-                  <PropertyCard
-                    title="Furnished Townhouse"
-                    price="R 15,000 /month"
-                    location="Bryanston, Johannesburg"
-                    beds={3}
-                    baths={2.5}
-                    size="160 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="rent"
-                  />
+                  {rentProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
+                    <PropertyCard
+                      key={property.id?.toString()?.toString()?.toString()}
+                      id={property.id?.toString()?.toString()?.toString()}
+                      title={property.title}
+                      price={property.price}
+                      location={`${property.location.city}, ${property.location.province}`}
+                      beds={property.features.bedrooms}
+                      baths={property.features.bathrooms}
+                      size={property.features.size.toString()}
+                      image={property.images[0]?.image?.url || '/placeholder.svg'}
+                      type={property.transactionType as "sale" | "rent" | "swap"}
+                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
+                    />
+                  ))}
                 </div>
               </TabsContent>
             </Tabs>

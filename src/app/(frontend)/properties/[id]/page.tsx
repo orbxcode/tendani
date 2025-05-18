@@ -1,15 +1,52 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Building, MapPin, Bed, Bath, Maximize, Phone, Mail, Share2, Heart } from 'lucide-react'
+import { notFound } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
 import { PropertyCard } from '@/components/property-card'
 import { PropertyEnquiryForm } from '@/components/property-enquiry-form'
+import { PropertySwapDetails } from '@/components/property-swap-details'
 import Header from '@/components/Header'
+import { getPropertyById, getProperties } from '../actions'
+import { Key } from 'react'
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react'
 
-export default function PropertyDetailsPage() {
+interface PropertyPageProps {
+  params: {
+    id: string
+  }
+}
+
+export default async function PropertyDetailsPage({ params }: PropertyPageProps) {
+  const property = await getPropertyById(params.id)
+
+  if (!property) {
+    notFound()
+  }
+
+  // Fetch similar properties
+  const { docs: similarProperties } = await getProperties({
+    where: {
+      and: [
+        { id: { not_equals: property.id } },
+        { propertyType: { equals: property.propertyType } },
+        { transactionType: { equals: property.transactionType } },
+      ],
+    },
+    limit: 3,
+  })
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: 'ZAR',
+      maximumFractionDigits: 0,
+    }).format(price)
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -25,47 +62,34 @@ export default function PropertyDetailsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="md:col-span-2">
               <Image
-                src="/placeholder.svg?height=600&width=1000"
-                alt="Luxury Apartment in Cape Town"
+                src={property.images[0]?.image?.url || '/placeholder.svg'}
+                alt={property.images[0]?.alt || property.title}
                 width={1000}
                 height={600}
                 className="rounded-lg object-cover w-full h-[400px]"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Image
-                src="/placeholder.svg?height=300&width=400"
-                alt="Property Image"
-                width={400}
-                height={300}
-                className="rounded-lg object-cover w-full h-[190px]"
-              />
-              <Image
-                src="/placeholder.svg?height=300&width=400"
-                alt="Property Image"
-                width={400}
-                height={300}
-                className="rounded-lg object-cover w-full h-[190px]"
-              />
-              <Image
-                src="/placeholder.svg?height=300&width=400"
-                alt="Property Image"
-                width={400}
-                height={300}
-                className="rounded-lg object-cover w-full h-[190px]"
-              />
-              <div className="relative">
-                <Image
-                  src="/placeholder.svg?height=300&width=400"
-                  alt="Property Image"
-                  width={400}
-                  height={300}
-                  className="rounded-lg object-cover w-full h-[190px] brightness-50"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Button variant="secondary">View All Photos</Button>
-                </div>
-              </div>
+              {property.images
+                .slice(1, 5)
+                .map((img: { image: { url: any }; alt: any }, index: Key | null | undefined) => (
+                  <div key={index} className={`relative ${index === 3 ? 'group' : ''}`}>
+                    <Image
+                      src={img.image?.url || '/placeholder.svg'}
+                      alt={img.alt || `Property Image ${Number(index) + 2}`}
+                      width={400}
+                      height={300}
+                      className={`rounded-lg object-cover w-full h-[190px] ${
+                        index === 3 ? 'group-hover:brightness-50' : ''
+                      }`}
+                    />
+                    {index === 3 && property.images.length > 5 && (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <Button variant="secondary">+{property.images.length - 5} More</Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -74,15 +98,26 @@ export default function PropertyDetailsPage() {
             <div className="flex-1">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Luxury Apartment in Cape Town</h1>
+                  <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
                   <div className="flex items-center text-muted-foreground">
                     <MapPin className="h-4 w-4 mr-1" />
-                    <span>Sea Point, Cape Town, Western Cape</span>
+                    <span>
+                      {property.location.address}, {property.location.city},{' '}
+                      {property.location.province}
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-primary">R 2,950,000</div>
-                  <div className="text-sm text-muted-foreground">For Sale</div>
+                  <div className="text-3xl font-bold text-primary">
+                    {formatPrice(property.price)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {property.transactionType === 'sale'
+                      ? 'For Sale'
+                      : property.transactionType === 'rent'
+                        ? 'For Rent'
+                        : 'For Swap'}
+                  </div>
                 </div>
               </div>
 
@@ -91,38 +126,24 @@ export default function PropertyDetailsPage() {
                 <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
                   <Bed className="h-6 w-6 mb-2 text-primary" />
                   <span className="text-sm text-muted-foreground">Bedrooms</span>
-                  <span className="font-bold">2</span>
+                  <span className="font-bold">{property.features.bedrooms}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
                   <Bath className="h-6 w-6 mb-2 text-primary" />
                   <span className="text-sm text-muted-foreground">Bathrooms</span>
-                  <span className="font-bold">2</span>
+                  <span className="font-bold">{property.features.bathrooms}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
                   <Maximize className="h-6 w-6 mb-2 text-primary" />
                   <span className="text-sm text-muted-foreground">Area</span>
-                  <span className="font-bold">120 m²</span>
+                  <span className="font-bold">{property.features.size} m²</span>
                 </div>
               </div>
 
               {/* Swap Details - Only shown for swap properties */}
-              <div className="mb-8 p-4 border rounded-lg bg-muted/30">
-                <h2 className="text-xl font-bold mb-4">Swap Details</h2>
-                <p className="mb-2">
-                  This property is available for swap. The owner is looking for:
-                </p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>A 2-bedroom apartment in Cape Town</li>
-                  <li>Preferably in the City Bowl or Atlantic Seaboard area</li>
-                  <li>With at least 1 parking space</li>
-                  <li>Modern finishes preferred</li>
-                </ul>
-                <div className="mt-4">
-                  <Button asChild>
-                    <Link href="/swap-property">Propose a Swap</Link>
-                  </Button>
-                </div>
-              </div>
+              {property.transactionType === 'swap' && property.swapPreferences && (
+                <PropertySwapDetails swapPreferences={property.swapPreferences} />
+              )}
 
               {/* Tabs */}
               <Tabs defaultValue="description" className="mb-8">
@@ -133,210 +154,58 @@ export default function PropertyDetailsPage() {
                 </TabsList>
                 <TabsContent value="description" className="pt-4">
                   <div className="space-y-4">
-                    <p>
-                      This stunning luxury apartment in the heart of Sea Point offers breathtaking
-                      ocean views and modern living at its finest. Recently renovated with high-end
-                      finishes, this property represents the perfect blend of comfort, style, and
-                      location.
-                    </p>
-                    <p>
-                      The open-plan living area features floor-to-ceiling windows that flood the
-                      space with natural light and showcase the magnificent sea views. The designer
-                      kitchen comes fully equipped with premium appliances, stone countertops, and
-                      ample storage.
-                    </p>
-                    <p>
-                      Both bedrooms are generously sized with built-in wardrobes, and the master
-                      bedroom includes an en-suite bathroom with a walk-in shower. The second
-                      bathroom features a full bathtub and modern fixtures.
-                    </p>
-                    <p>
-                      Additional features include secure parking, 24-hour security, a communal pool,
-                      and easy access to Sea Point Promenade, restaurants, shops, and public
-                      transport.
-                    </p>
+                    <p>{property.description}</p>
                   </div>
                 </TabsContent>
                 <TabsContent value="features" className="pt-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-4">
-                      <h3 className="font-semibold">Interior Features</h3>
+                      <h3 className="font-semibold">Amenities</h3>
                       <ul className="space-y-2">
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Air Conditioning
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Built-in Wardrobes
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Dishwasher
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Granite Countertops
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Walk-in Shower
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="space-y-4">
-                      <h3 className="font-semibold">Exterior Features</h3>
-                      <ul className="space-y-2">
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Balcony
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Communal Pool
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Secure Parking
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          24-Hour Security
-                        </li>
-                        <li className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4 mr-2 text-primary"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Elevator
-                        </li>
+                        {property.amenities.map(
+                          (
+                            amenity:
+                              | string
+                              | number
+                              | bigint
+                              | boolean
+                              | ReactElement<unknown, string | JSXElementConstructor<any>>
+                              | Iterable<ReactNode>
+                              | ReactPortal
+                              | Promise<
+                                  | string
+                                  | number
+                                  | bigint
+                                  | boolean
+                                  | ReactPortal
+                                  | ReactElement<unknown, string | JSXElementConstructor<any>>
+                                  | Iterable<ReactNode>
+                                  | null
+                                  | undefined
+                                >
+                              | null
+                              | undefined,
+                            index: Key | null | undefined,
+                          ) => (
+                            <li key={index} className="flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-4 w-4 mr-2 text-primary"
+                              >
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              {amenity}
+                            </li>
+                          ),
+                        )}
                       </ul>
                     </div>
                   </div>
@@ -344,101 +213,67 @@ export default function PropertyDetailsPage() {
                 <TabsContent value="location" className="pt-4">
                   <div className="space-y-4">
                     <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                      <Image
-                        src="/placeholder.svg?height=500&width=800"
-                        alt="Map"
-                        width={800}
-                        height={500}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">Nearby Amenities</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="text-sm font-medium">Education</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 mt-1">
-                            <li>Sea Point Primary School (0.5 km)</li>
-                            <li>Sea Point High School (0.8 km)</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium">Shopping</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 mt-1">
-                            <li>Sea Point Promenade (0.2 km)</li>
-                            <li>V&A Waterfront (3.5 km)</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium">Transportation</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 mt-1">
-                            <li>MyCiti Bus Stop (0.3 km)</li>
-                            <li>Cape Town International Airport (22 km)</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium">Healthcare</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 mt-1">
-                            <li>Sea Point Medical Center (0.7 km)</li>
-                            <li>Cape Town Mediclinic (4.2 km)</li>
-                          </ul>
-                        </div>
+                      {/* Add your map component here */}
+                      <div className="w-full h-full flex items-center justify-center">
+                        <p className="text-muted-foreground">Map view coming soon</p>
                       </div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Property Location</h3>
+                      <p className="text-muted-foreground">
+                        {property.location.address}, {property.location.city},{' '}
+                        {property.location.province}
+                      </p>
                     </div>
                   </div>
                 </TabsContent>
               </Tabs>
 
-              {/* Floor Plan */}
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Floor Plan</h2>
-                <div className="border rounded-lg p-4">
-                  <Image
-                    src="/placeholder.svg?height=400&width=800"
-                    alt="Floor Plan"
-                    width={800}
-                    height={400}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
-
               {/* Similar Properties */}
-              <div>
-                <h2 className="text-xl font-bold mb-4">Similar Properties</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <PropertyCard
-                    title="Modern Apartment in Green Point"
-                    price="R 3,150,000"
-                    location="Green Point, Cape Town"
-                    beds={2}
-                    baths={2}
-                    size="110 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Waterfront Apartment"
-                    price="R 4,200,000"
-                    location="V&A Waterfront, Cape Town"
-                    beds={2}
-                    baths={2}
-                    size="130 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
-                  <PropertyCard
-                    title="Penthouse with City Views"
-                    price="R 5,500,000"
-                    location="De Waterkant, Cape Town"
-                    beds={3}
-                    baths={2}
-                    size="160 m²"
-                    image="/placeholder.svg?height=400&width=600"
-                    type="sale"
-                  />
+              {similarProperties.length > 0 && (
+                <div>
+                  <h2 className="text-xl font-bold mb-4">Similar Properties</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {similarProperties.map(
+                      (similarProperty: {
+                        id: Key | null | undefined
+                        title: string
+                        price: string | number
+                        location: { city: any; province: any }
+                        features: {
+                          bedrooms: number
+                          bathrooms: number
+                          size: { toString: () => string }
+                        }
+                        images: { image: { url: any } }[]
+                        transactionType: string
+                        status: string | undefined
+                      }) => (
+                        <PropertyCard
+                          key={similarProperty.id?.toString()?.toString()?.toString()}
+                          id={similarProperty.id?.toString()?.toString()?.toString()}
+                          title={similarProperty.title}
+                          price={similarProperty.price}
+                          location={`${similarProperty.location.city}, ${similarProperty.location.province}`}
+                          beds={similarProperty.features.bedrooms}
+                          baths={similarProperty.features.bathrooms}
+                          size={similarProperty.features.size.toString()}
+                          image={similarProperty.images[0]?.image?.url || '/placeholder.svg'}
+                          type={similarProperty.transactionType as 'sale' | 'rent' | 'swap'}
+                          status={
+                            similarProperty.status as
+                              | 'available'
+                              | 'under-offer'
+                              | 'sold'
+                              | 'rented'
+                              | undefined
+                          }
+                        />
+                      ),
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Sidebar */}
@@ -448,7 +283,7 @@ export default function PropertyDetailsPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <Image
-                      src="/placeholder.svg?height=200&width=200"
+                      src="/placeholder.svg"
                       alt="Tendani"
                       width={60}
                       height={60}
@@ -477,7 +312,9 @@ export default function PropertyDetailsPage() {
               <Card>
                 <CardContent className="p-6">
                   <h3 className="font-bold text-lg mb-4">Enquire About This Property</h3>
-                  <PropertyEnquiryForm propertyAddress="Sea Point, Cape Town" />
+                  <PropertyEnquiryForm
+                    propertyAddress={`${property.location.address}, ${property.location.city}`}
+                  />
                 </CardContent>
               </Card>
 

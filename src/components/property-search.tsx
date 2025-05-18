@@ -36,11 +36,11 @@ export function PropertySearch() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select value={propertyType} onValueChange={setPropertyType}>
+        <Select  value={propertyType} onValueChange={setPropertyType}>
           <SelectTrigger className="w-full md:w-[180px]">
             <SelectValue placeholder="Property Type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="text-primary">
             <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="house">House</SelectItem>
             <SelectItem value="apartment">Apartment</SelectItem>
@@ -53,8 +53,8 @@ export function PropertySearch() {
           <SelectTrigger className="w-full md:w-[180px]">
             <SelectValue placeholder="Location" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Locations</SelectItem>
+          <SelectContent className="text-black">
+            <SelectItem value="all" defaultValue={"all"}>All Locations</SelectItem>
             <SelectItem value="johannesburg">Johannesburg</SelectItem>
             <SelectItem value="cape-town">Cape Town</SelectItem>
             <SelectItem value="durban">Durban</SelectItem>

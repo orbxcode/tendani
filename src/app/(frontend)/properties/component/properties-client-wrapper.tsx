@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { PropertiesComponent } from './property-component'
 import { Property } from './property-component'
+import { getProperties } from '../actions'
 
 interface PropertiesClientWrapperProps {
   initialData: {
@@ -29,14 +30,74 @@ export function PropertiesClientWrapper({ initialData }: PropertiesClientWrapper
     sortOrder: 'desc' as 'asc' | 'desc',
   })
 
+  const fetchProperties = async (page: number, currentFilters = filters) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const where: any = {}
+
+      // Add transaction type filter
+      if (currentFilters.transactionType.length > 0) {
+        where.transactionType = {
+          in: currentFilters.transactionType,
+        }
+      }
+
+      // Add property type filter
+      if (currentFilters.propertyType !== 'all') {
+        where.propertyType = {
+          equals: currentFilters.propertyType,
+        }
+      }
+
+      // Add city filter
+      if (currentFilters.city !== 'all') {
+        where['location.city'] = {
+          equals: currentFilters.city,
+        }
+      }
+
+      // Add price range filter
+      where.price = {
+        gte: currentFilters.minPrice,
+        lte: currentFilters.maxPrice,
+      }
+
+      // Add bedrooms filter
+      if (currentFilters.minBedrooms > 0) {
+        where['features.bedrooms'] = {
+          gte: currentFilters.minBedrooms,
+        }
+      }
+
+      const sort = `${currentFilters.sortOrder === 'desc' ? '-' : ''}${currentFilters.sortBy}`
+
+      const response = await getProperties({
+        page,
+        where,
+        sort,
+      })
+
+      setProperties(response.docs)
+      setTotalPages(response.totalPages)
+      setCurrentPage(response.page)
+    } catch (err) {
+      setError('Failed to fetch properties. Please try again.')
+      console.error('Error fetching properties:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters }))
-    // TODO: Fetch properties with new filters
+    const updatedFilters = { ...filters, ...newFilters }
+    setFilters(updatedFilters)
+    fetchProperties(1, updatedFilters)
   }
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    // TODO: Fetch properties for new page
+    fetchProperties(page)
   }
 
   return (

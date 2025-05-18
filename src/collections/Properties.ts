@@ -1,9 +1,10 @@
-import { CollectionConfig } from 'payload'
+import { CollectionConfig } from 'payload/types'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
   admin: {
     useAsTitle: 'title',
+    defaultColumns: ['title', 'propertyType', 'transactionType', 'price', 'status'],
   },
   access: {
     read: () => true,
@@ -16,17 +17,19 @@ export const Properties: CollectionConfig = {
     },
     {
       name: 'description',
-      type: 'text',
+      type: 'textarea',
       required: true,
     },
     {
       name: 'price',
       type: 'number',
       required: true,
+      min: 0,
     },
     {
       name: 'location',
       type: 'group',
+      required: true,
       fields: [
         {
           name: 'city',
@@ -64,69 +67,52 @@ export const Properties: CollectionConfig = {
     {
       name: 'propertyType',
       type: 'select',
-      options: [
-        {
-          label: 'House',
-          value: 'house',
-        },
-        {
-          label: 'Apartment',
-          value: 'apartment',
-        },
-        {
-          label: 'Townhouse',
-          value: 'townhouse',
-        },
-        {
-          label: 'Villa',
-          value: 'villa',
-        },
-      ],
       required: true,
+      options: [
+        { label: 'House', value: 'house' },
+        { label: 'Apartment', value: 'apartment' },
+        { label: 'Townhouse', value: 'townhouse' },
+        { label: 'Villa', value: 'villa' },
+      ],
     },
     {
       name: 'transactionType',
       type: 'select',
-      options: [
-        {
-          label: 'For Sale',
-          value: 'sale',
-        },
-        {
-          label: 'For Rent',
-          value: 'rent',
-        },
-        {
-          label: 'For Swap',
-          value: 'swap',
-        },
-      ],
       required: true,
+      options: [
+        { label: 'For Sale', value: 'sale' },
+        { label: 'For Rent', value: 'rent' },
+        { label: 'For Swap', value: 'swap' },
+      ],
     },
     {
       name: 'features',
       type: 'group',
+      required: true,
       fields: [
         {
           name: 'bedrooms',
           type: 'number',
           required: true,
+          min: 0,
         },
         {
           name: 'bathrooms',
           type: 'number',
           required: true,
+          min: 0,
         },
         {
           name: 'size',
           type: 'number',
           required: true,
-          label: 'Size (in square meters)',
+          min: 0,
         },
         {
           name: 'parking',
           type: 'number',
           required: true,
+          min: 0,
         },
       ],
     },
@@ -135,38 +121,12 @@ export const Properties: CollectionConfig = {
       type: 'select',
       hasMany: true,
       options: [
-        {
-          label: 'Swimming Pool',
-          value: 'pool',
-        },
-        {
-          label: 'Garden',
-          value: 'garden',
-        },
-        {
-          label: 'Security',
-          value: 'security',
-        },
-        {
-          label: 'Air Conditioning',
-          value: 'aircon',
-        },
-        {
-          label: 'Built-in Wardrobes',
-          value: 'wardrobes',
-        },
-        {
-          label: 'Dishwasher',
-          value: 'dishwasher',
-        },
-        {
-          label: 'Balcony',
-          value: 'balcony',
-        },
-        {
-          label: 'Elevator',
-          value: 'elevator',
-        },
+        { label: 'Swimming Pool', value: 'pool' },
+        { label: 'Garden', value: 'garden' },
+        { label: 'Security', value: 'security' },
+        { label: 'Garage', value: 'garage' },
+        { label: 'Air Conditioning', value: 'air-conditioning' },
+        { label: 'Furnished', value: 'furnished' },
       ],
     },
     {
@@ -189,71 +149,14 @@ export const Properties: CollectionConfig = {
       ],
     },
     {
-      name: 'floorPlan',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'nearbyAmenities',
-      type: 'array',
-      fields: [
-        {
-          name: 'category',
-          type: 'select',
-          options: [
-            {
-              label: 'Education',
-              value: 'education',
-            },
-            {
-              label: 'Shopping',
-              value: 'shopping',
-            },
-            {
-              label: 'Transportation',
-              value: 'transportation',
-            },
-            {
-              label: 'Healthcare',
-              value: 'healthcare',
-            },
-          ],
-          required: true,
-        },
-        {
-          name: 'name',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'distance',
-          type: 'number',
-          required: true,
-          label: 'Distance (in km)',
-        },
-      ],
-    },
-    {
       name: 'status',
       type: 'select',
       defaultValue: 'available',
       options: [
-        {
-          label: 'Available',
-          value: 'available',
-        },
-        {
-          label: 'Under Offer',
-          value: 'under-offer',
-        },
-        {
-          label: 'Sold',
-          value: 'sold',
-        },
-        {
-          label: 'Rented',
-          value: 'rented',
-        },
+        { label: 'Available', value: 'available' },
+        { label: 'Under Offer', value: 'under-offer' },
+        { label: 'Sold', value: 'sold' },
+        { label: 'Rented', value: 'rented' },
       ],
     },
     {
@@ -284,36 +187,32 @@ export const Properties: CollectionConfig = {
           type: 'select',
           hasMany: true,
           options: [
-            {
-              label: 'House',
-              value: 'house',
-            },
-            {
-              label: 'Apartment',
-              value: 'apartment',
-            },
-            {
-              label: 'Townhouse',
-              value: 'townhouse',
-            },
-            {
-              label: 'Villa',
-              value: 'villa',
-            },
+            { label: 'House', value: 'house' },
+            { label: 'Apartment', value: 'apartment' },
+            { label: 'Townhouse', value: 'townhouse' },
+            { label: 'Villa', value: 'villa' },
           ],
         },
         {
           name: 'minBedrooms',
           type: 'number',
+          min: 0,
         },
         {
           name: 'minBathrooms',
           type: 'number',
+          min: 0,
         },
         {
           name: 'minSize',
           type: 'number',
           label: 'Minimum Size (in square meters)',
+          min: 0,
+        },
+        {
+          name: 'additionalNotes',
+          type: 'textarea',
+          label: 'Additional Requirements or Notes',
         },
       ],
     },

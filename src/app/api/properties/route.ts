@@ -1,69 +1,46 @@
 import { NextResponse } from 'next/server'
-import payload from 'payload'
+import { getPayload } from 'payload/dist/payload'
+import config from '@payload-config'
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-
-  const page = Number(searchParams.get('page')) || 1
-  const limit = Number(searchParams.get('limit')) || 12
-  const transactionType = searchParams.get('transactionType')
-  const propertyType = searchParams.get('propertyType')
-  const city = searchParams.get('city')
-  const minPrice = Number(searchParams.get('minPrice'))
-  const maxPrice = Number(searchParams.get('maxPrice'))
-  const minBedrooms = Number(searchParams.get('minBedrooms'))
-  const sortBy = searchParams.get('sortBy') || 'createdAt'
-  const sortOrder = searchParams.get('sortOrder') || 'desc'
-
-  const query: any = {
-    status: 'available',
-  }
-
-  if (transactionType) {
-    query.transactionType = transactionType
-  }
-
-  if (propertyType) {
-    query.propertyType = propertyType
-  }
-
-  if (city) {
-    query['location.city'] = city
-  }
-
-  if (minPrice) {
-    query.price = {
-      ...query.price,
-      greater_than_equal: minPrice,
-    }
-  }
-
-  if (maxPrice) {
-    query.price = {
-      ...query.price,
-      less_than_equal: maxPrice,
-    }
-  }
-
-  if (minBedrooms) {
-    query['features.bedrooms'] = {
-      greater_than_equal: minBedrooms,
-    }
-  }
-
+export async function POST(request: Request) {
   try {
+    const payload = await getPayload({ config })
+    const body = await request.json()
+
+    const property = await payload.create({
+      collection: 'properties',
+      data: body,
+    })
+
+    return NextResponse.json(property)
+  } catch (error) {
+    console.error('Error creating property:', error)
+    return NextResponse.json({ error: 'Failed to create property' }, { status: 500 })
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    const payload = await getPayload({ config })
+    const { searchParams } = new URL(request.url)
+
+    const page = Number(searchParams.get('page')) || 1
+    const limit = Number(searchParams.get('limit')) || 10
+    const where = searchParams.get('where') ? JSON.parse(searchParams.get('where')!) : {}
+    const sort = searchParams.get('sort') || '-createdAt'
+
     const properties = await payload.find({
       collection: 'properties',
-      where: query,
+      depth: 1,
       page,
       limit,
-      sort: `${sortOrder === 'desc' ? '-' : ''}${sortBy}`,
-      depth: 2,
+      where,
+      sort,
     })
 
     return NextResponse.json(properties)
   } catch (error) {
     console.error('Error fetching properties:', error)
-    return NextResponse.json({ error: 'Error fetching properties' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch properties' }, { status: 500 })
   }
 }
