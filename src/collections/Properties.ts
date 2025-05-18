@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from 'payload'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -16,7 +16,7 @@ export const Properties: CollectionConfig = {
     },
     {
       name: 'description',
-      type: 'richText',
+      type: 'text',
       required: true,
     },
     {
@@ -232,12 +232,6 @@ export const Properties: CollectionConfig = {
           label: 'Distance (in km)',
         },
       ],
-    },
-    {
-      name: 'agent',
-      type: 'relationship',
-      relationTo: 'agents',
-      required: true,
     },
     {
       name: 'status',

@@ -14,6 +14,7 @@ interface PropertyCardProps {
   size: string
   image: string
   type: 'sale' | 'rent' | 'swap'
+  status?: 'available' | 'under-offer' | 'sold' | 'rented'
 }
 
 export function PropertyCard({
@@ -26,6 +27,7 @@ export function PropertyCard({
   size,
   image,
   type,
+  status,
 }: PropertyCardProps) {
   const formatPrice = (price: string | number, type: string) => {
     if (type === 'swap') return 'Swap Only'
