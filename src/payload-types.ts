@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     users: User;
     about: About;
-    testimonials: Testimonial;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -79,7 +78,6 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     about: AboutSelect<false> | AboutSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -141,21 +139,7 @@ export interface User {
  */
 export interface About {
   id: number;
-  aboutTendani: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+  aboutTendani: string;
   image: number | Media;
   yearsOfExperience: number;
   happyClients: number;
@@ -190,6 +174,15 @@ export interface About {
     };
     [k: string]: unknown;
   };
+  testimonials?:
+    | {
+        rating: number;
+        message: string;
+        author: string;
+        location: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -214,19 +207,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
- */
-export interface Testimonial {
-  id: number;
-  rating: number;
-  message: string;
-  author: string;
-  location: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -239,10 +219,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'about';
         value: number | About;
-      } | null)
-    | ({
-        relationTo: 'testimonials';
-        value: number | Testimonial;
       } | null)
     | ({
         relationTo: 'media';
@@ -318,18 +294,15 @@ export interface AboutSelect<T extends boolean = true> {
   awards?: T;
   mission?: T;
   vision?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials_select".
- */
-export interface TestimonialsSelect<T extends boolean = true> {
-  rating?: T;
-  message?: T;
-  author?: T;
-  location?: T;
+  testimonials?:
+    | T
+    | {
+        rating?: T;
+        message?: T;
+        author?: T;
+        location?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

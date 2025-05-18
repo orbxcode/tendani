@@ -9,16 +9,14 @@ import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { getServerSideURL } from './utilities/getURL'
 import { About } from './collections/About'
-import { ClientTestimonial } from './collections/ClientTestimonial'
+import { Properties } from './collections/Properties'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    components: {
-   
-    },
+    components: {},
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -49,16 +47,14 @@ export default buildConfig({
 
   // database-adapter-config-start
   db: sqliteAdapter({
-      client: {
-        url: process.env.DATABASE_URI
-      }
+    client: {
+      url: process.env.DATABASE_URI,
+    },
   }),
   // database-adapter-config-end
-  collections: [Users, About, ClientTestimonial, Media],
+  collections: [Users, About, Media, Properties],
   cors: [getServerSideURL()].filter(Boolean),
-  plugins: [
-    
-  ],
+  plugins: [],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
@@ -78,5 +74,8 @@ export default buildConfig({
       },
     },
     tasks: [],
+  },
+  graphQL: {
+    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
 })

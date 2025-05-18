@@ -17,10 +17,9 @@ export const About: CollectionConfig = {
   fields: [
     {
       name: 'aboutTendani',
-      type: 'richText',
+      type: 'textarea',
       label: 'About Tendani',
       required: true,
-      editor: lexicalEditor(),
     },
     {
       name: 'image',
@@ -43,7 +42,7 @@ export const About: CollectionConfig = {
       required: true,
       min: 0,
     },
-    {
+        {
       name: 'awards',
       type: 'number',
       label: 'Industry Awards',
@@ -63,6 +62,39 @@ export const About: CollectionConfig = {
       label: 'Our Vision',
       required: true,
       editor: lexicalEditor(),
+    },
+    {
+      name: 'testimonials',
+      type: 'array',
+      label: 'Testimonials',
+      fields: [
+        {
+          name: 'rating',
+          type: 'number',
+          label: 'Rating (1-5)',
+          required: true,
+          min: 1,
+          max: 5,
+        },
+        {
+          name: 'message',
+          type: 'textarea',
+          label: 'Testimonial Message',
+          required: true,
+        },
+        {
+          name: 'author',
+          type: 'text',
+          label: 'Author Name',
+          required: true,
+        },
+        {
+          name: 'location',
+          type: 'text',
+          label: 'Location',
+          required: true,
+        },
+      ],
     },
   ],
 }

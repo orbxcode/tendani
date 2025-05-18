@@ -1,59 +1,21 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, MapPin } from "lucide-react"
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowRight, MapPin } from 'lucide-react'
 
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PropertyCard } from "@/components/property-card"
-import { TestimonialCard } from "@/components/testimonial-card"
-import { MobileMenu } from "@/components/mobile-menu"
-import { PropertySearch } from "@/components/property-search"
-import { Logo } from "@/components/logo"
-import Footer from "@/components/Footer"
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { PropertyCard } from '@/components/property-card'
+import { TestimonialCard } from '@/components/testimonial-card'
+import { MobileMenu } from '@/components/mobile-menu'
+import { PropertySearch } from '@/components/property-search'
+import { Logo } from '@/components/logo'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Logo />
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary">
-              Home
-            </Link>
-            <Link href="/properties" className="text-sm font-medium hover:text-primary">
-              Properties
-            </Link>
-            <Link href="/swap-property" className="text-sm font-medium hover:text-primary">
-              Swap Property
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary">
-              About
-            </Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-primary">
-              Contact
-            </Link>
-            <Link href="/join-team" className="text-sm font-medium hover:text-primary">
-              Join Our Team
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="hidden md:flex">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button asChild className="hidden sm:flex md:flex">
-              <Link href="/properties">Browse Properties</Link>
-            </Button>
-            <Button asChild size="icon" className="sm:hidden">
-              <Link href="/properties">
-                <MapPin className="h-5 w-5" />
-                <span className="sr-only">Browse Properties</span>
-              </Link>
-            </Button>
-            <MobileMenu />
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48">
@@ -71,7 +33,8 @@ export default function HomePage() {
               Your Trusted Partner in South African Property
             </h1>
             <p className="mx-auto mt-4 max-w-[700px] text-lg text-white/90 md:text-xl">
-              With over 20 years of expertise, Tendani helps you find your dream property or investment opportunity.
+              With over 20 years of expertise, Tendani helps you find your dream property or
+              investment opportunity.
             </p>
             <div className="mt-8 bg-white/10 backdrop-blur-sm p-4 rounded-lg">
               <PropertySearch />
@@ -83,10 +46,20 @@ export default function HomePage() {
               <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
                 <Link href="/properties?type=rent">Browse Properties for Rent</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="text-primary border-white hover:bg-white/10"
+              >
                 <Link href="/sell">Sell Your Property</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="text-primary border-white hover:bg-white/10"
+              >
                 <Link href="/swap-property">Swap Your Property</Link>
               </Button>
             </div>
@@ -102,9 +75,10 @@ export default function HomePage() {
                   Meet Tendani: Your Experienced Property Partner
                 </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  With over two decades in South African property development, Tendani has established himself as a
-                  trusted name in the industry. His commitment to client satisfaction and deep market knowledge ensures
-                  you receive the best service for all your property needs.
+                  With over two decades in South African property development, Tendani has
+                  established himself as a trusted name in the industry. His commitment to client
+                  satisfaction and deep market knowledge ensures you receive the best service for
+                  all your property needs.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -130,7 +104,9 @@ export default function HomePage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Featured Property Listings</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  Featured Property Listings
+                </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Explore our selection of premium properties across South Africa
                 </p>
@@ -139,7 +115,7 @@ export default function HomePage() {
             <Tabs defaultValue="all" className="mt-8">
               <div className="flex justify-center">
                 <TabsList>
-                  <TabsTrigger value="all" >All</TabsTrigger>
+                  <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="sale">For Sale</TabsTrigger>
                   <TabsTrigger value="rent">For Rent</TabsTrigger>
                 </TabsList>
@@ -263,7 +239,9 @@ export default function HomePage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">What Our Clients Say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  What Our Clients Say
+                </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Hear from our satisfied clients about their experience working with Tendani
                 </p>
@@ -301,15 +279,20 @@ export default function HomePage() {
                   Ready to Find Your Ideal Property or Explore New Opportunities?
                 </h2>
                 <p className="max-w-[600px] md:text-xl">
-                  Whether you're looking to buy, sell, rent, or join our team, we're here to help you every step of the
-                  way.
+                  Whether you're looking to buy, sell, rent, or join our team, we're here to help
+                  you every step of the way.
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/properties">Buy or Rent Now</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="text-primary border-white hover:bg-white/10"
+                >
                   <Link href="/join-team">Join Our Agent Network</Link>
                 </Button>
               </div>
@@ -317,7 +300,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-     <Footer />
+      <Footer />
     </div>
   )
 }

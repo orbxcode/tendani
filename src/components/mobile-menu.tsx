@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { X, Menu, Building, Home, MapPin, Info, Phone, UserPlus } from "lucide-react"
+import { X, Menu, Building, Home, MapPin, Info, Phone, UserPlus, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
@@ -82,12 +82,12 @@ export function MobileMenu() {
               About
             </Link>
             <Link
-              href="/contact"
+              href="/market"
               className="flex items-center gap-3 text-lg font-medium px-4 py-2 hover:bg-muted rounded-md transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              <Phone className="h-5 w-5" />
-              Contact
+              <TrendingUp className="h-5 w-5" />
+              Market
             </Link>
             <Link
               href="/join-team"
@@ -106,7 +106,7 @@ export function MobileMenu() {
               </Link>
             </Button>
             <Button asChild variant="outline" className="w-full">
-              <Link href="/contact">Contact Us</Link>
+              <Link href="/market">Market Trends</Link>
             </Button>
 
             {/* Footer icons */}

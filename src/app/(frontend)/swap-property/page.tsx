@@ -1,62 +1,30 @@
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import Image from "next/image"
-import { Building, ArrowRight, Repeat } from "lucide-react"
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import Image from 'next/image'
+import { Building, ArrowRight, Repeat } from 'lucide-react'
 
-import { Button } from "@/components/ui/button"
-import { SwapPropertyForm } from "@/components/swap-property-form"
-import { MobileMenu } from "@/components/mobile-menu"
-import Footer from "@/components/Footer"
+import { Button } from '@/components/ui/button'
+import { SwapPropertyForm } from '@/components/swap-property-form'
+import { MobileMenu } from '@/components/mobile-menu'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 
 export default function SwapPropertyPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <Building className="h-6 w-6" />
-            <span>Tendani Properties</span>
-          </Link>
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary">
-              Home
-            </Link>
-            <Link href="/properties" className="text-sm font-medium hover:text-primary">
-              Properties
-            </Link>
-            <Link href="/swap-property" className="text-sm font-medium text-primary">
-              Swap Property
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary">
-              About
-            </Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-primary">
-              Contact
-            </Link>
-            <Link href="/join-team" className="text-sm font-medium hover:text-primary">
-              Join Our Team
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="hidden md:flex">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/properties">Browse Properties</Link>
-            </Button>
-            <MobileMenu />
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Swap Your Property</h1>
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  Swap Your Property
+                </h1>
                 <p className="max-w-[700px] text-muted-foreground md:text-xl">
-                  Looking to exchange your property? Submit your details below and find your perfect swap match.
+                  Looking to exchange your property? Submit your details below and find your perfect
+                  swap match.
                 </p>
               </div>
             </div>
@@ -79,8 +47,8 @@ export default function SwapPropertyPage() {
                 </div>
                 <h3 className="text-xl font-bold">Submit Your Property</h3>
                 <p className="text-muted-foreground">
-                  Fill out the form below with details about your current property and what you're looking for in a
-                  swap.
+                  Fill out the form below with details about your current property and what you're
+                  looking for in a swap.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-4">
@@ -89,8 +57,8 @@ export default function SwapPropertyPage() {
                 </div>
                 <h3 className="text-xl font-bold">Get Matched</h3>
                 <p className="text-muted-foreground">
-                  Our team and AI agent will review your submission and match you with potential swap opportunities from our
-                  database.
+                  Our team and AI agent will review your submission and match you with potential
+                  swap opportunities from our database.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-4">
@@ -99,7 +67,8 @@ export default function SwapPropertyPage() {
                 </div>
                 <h3 className="text-xl font-bold">Complete Your Swap</h3>
                 <p className="text-muted-foreground">
-                  Once you find a suitable match, our team will guide you through the property exchange process.
+                  Once you find a suitable match, our team will guide you through the property
+                  exchange process.
                 </p>
               </div>
             </div>
@@ -111,10 +80,12 @@ export default function SwapPropertyPage() {
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-start">
               <div className="space-y-4">
-                <h2 className="text-3xl font-bold tracking-tighter">Submit Your Property for Swap</h2>
+                <h2 className="text-3xl font-bold tracking-tighter">
+                  Submit Your Property for Swap
+                </h2>
                 <p className="text-muted-foreground">
-                  Fill out the form with details about your current property and what you're looking for in a swap. Our
-                  team will contact you with potential matches.
+                  Fill out the form with details about your current property and what you're looking
+                  for in a swap. Our team will contact you with potential matches.
                 </p>
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 space-y-2">
                   <div className="flex items-start gap-2">
@@ -122,8 +93,9 @@ export default function SwapPropertyPage() {
                     <div>
                       <h3 className="font-semibold">Why Swap?</h3>
                       <p className="text-sm text-muted-foreground">
-                        Property swapping can be a cost-effective alternative to traditional buying and selling,
-                        potentially saving on agent fees, transfer costs, and moving expenses.
+                        Property swapping can be a cost-effective alternative to traditional buying
+                        and selling, potentially saving on agent fees, transfer costs, and moving
+                        expenses.
                       </p>
                     </div>
                   </div>
@@ -149,7 +121,9 @@ export default function SwapPropertyPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter">Featured Properties for Swap</h2>
+                <h2 className="text-3xl font-bold tracking-tighter">
+                  Featured Properties for Swap
+                </h2>
                 <p className="max-w-[700px] text-muted-foreground md:text-lg">
                   Browse these properties currently available for swap
                 </p>
@@ -157,7 +131,9 @@ export default function SwapPropertyPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="group relative overflow-hidden rounded-lg border">
-                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">For Swap</Badge>
+                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">
+                  For Swap
+                </Badge>
                 <Link href="/properties/1">
                   <div className="aspect-[4/3] overflow-hidden">
                     <Image
@@ -226,7 +202,9 @@ export default function SwapPropertyPage() {
                 </div>
               </div>
               <div className="group relative overflow-hidden rounded-lg border">
-                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">For Swap</Badge>
+                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">
+                  For Swap
+                </Badge>
                 <Link href="/properties/2">
                   <div className="aspect-[4/3] overflow-hidden">
                     <Image
@@ -295,7 +273,9 @@ export default function SwapPropertyPage() {
                 </div>
               </div>
               <div className="group relative overflow-hidden rounded-lg border">
-                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">For Swap</Badge>
+                <Badge className="absolute top-2 right-2 z-10 bg-primary text-primary-foreground">
+                  For Swap
+                </Badge>
                 <Link href="/properties/3">
                   <div className="aspect-[4/3] overflow-hidden">
                     <Image
@@ -390,43 +370,49 @@ export default function SwapPropertyPage() {
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">How does property swapping work?</h3>
                 <p className="text-muted-foreground">
-                  Property swapping involves exchanging your property with another owner's property. Both parties agree
-                  to the exchange, and the necessary legal processes are followed to transfer ownership.
+                  Property swapping involves exchanging your property with another owner's property.
+                  Both parties agree to the exchange, and the necessary legal processes are followed
+                  to transfer ownership.
                 </p>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">Are there any fees involved?</h3>
                 <p className="text-muted-foreground">
-                  While you may save on agent commissions, there are still legal fees, transfer duties, and potentially
-                  capital gains tax to consider. Our team can provide a detailed breakdown of costs.
+                  While you may save on agent commissions, there are still legal fees, transfer
+                  duties, and potentially capital gains tax to consider. Our team can provide a
+                  detailed breakdown of costs.
                 </p>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">What if the properties have different values?</h3>
                 <p className="text-muted-foreground">
-                  If there's a value difference, the owner of the less valuable property typically pays the difference
-                  to the other party. This is negotiated as part of the swap agreement.
+                  If there's a value difference, the owner of the less valuable property typically
+                  pays the difference to the other party. This is negotiated as part of the swap
+                  agreement.
                 </p>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">How long does the swap process take?</h3>
                 <p className="text-muted-foreground">
-                  The process typically takes 2-3 months, similar to a traditional property sale. This includes finding
-                  a suitable match, legal processes, and transfer of ownership.
+                  The process typically takes 2-3 months, similar to a traditional property sale.
+                  This includes finding a suitable match, legal processes, and transfer of
+                  ownership.
                 </p>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">Is property swapping legally binding?</h3>
                 <p className="text-muted-foreground">
-                  Yes, once both parties agree to the swap and sign the necessary legal documents, the agreement is
-                  legally binding. Our legal team will guide you through this process.
+                  Yes, once both parties agree to the swap and sign the necessary legal documents,
+                  the agreement is legally binding. Our legal team will guide you through this
+                  process.
                 </p>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">Can I swap a property with a mortgage?</h3>
                 <p className="text-muted-foreground">
-                  Yes, but it requires additional steps. Both parties will need to settle their existing mortgages or
-                  arrange for new financing. Our team can help coordinate with financial institutions.
+                  Yes, but it requires additional steps. Both parties will need to settle their
+                  existing mortgages or arrange for new financing. Our team can help coordinate with
+                  financial institutions.
                 </p>
               </div>
             </div>
@@ -438,16 +424,24 @@ export default function SwapPropertyPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Ready to Swap Your Property?</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  Ready to Swap Your Property?
+                </h2>
                 <p className="max-w-[600px] md:text-xl">
-                  Submit your property details today and find your perfect swap match with Tendani Properties.
+                  Submit your property details today and find your perfect swap match with Tendani
+                  Properties.
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild size="lg" variant="secondary">
                   <Link href="#swap-form">Submit Your Property</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-primary border-white hover:bg-white/10">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="text-primary border-white hover:bg-white/10"
+                >
                   <Link href="/properties">Browse Swap Properties</Link>
                 </Button>
               </div>

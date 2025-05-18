@@ -1,60 +1,59 @@
-import Link from "next/link"
-import { Grid3X3, List, Search, SlidersHorizontal, MapPin } from "lucide-react"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { PropertyCard } from "@/components/property-card"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { MobileMenu } from "@/components/mobile-menu"
-import { PropertySearch } from "@/components/property-search"
-import { Logo } from "@/components/logo"
+import Link from 'next/link'
+import { Grid3X3, List, Search, SlidersHorizontal, MapPin } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
+import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { PropertyCard } from '@/components/property-card'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { MobileMenu } from '@/components/mobile-menu'
+import { PropertySearch } from '@/components/property-search'
+import { Logo } from '@/components/logo'
+import Header from '@/components/Header'
+import { useProperties } from '@/hooks/useProperties'
+import { useState } from 'react'
 
 export default function PropertiesPage() {
+  const [localFilters, setLocalFilters] = useState({
+    transactionType: [] as string[],
+    propertyType: '',
+    city: '',
+    minPrice: 0,
+    maxPrice: 20000000,
+    minBedrooms: 0,
+    sortBy: 'createdAt',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  })
+
+  const { properties, totalPages, currentPage, isLoading, error, setFilters, setPage } =
+    useProperties(localFilters)
+
+  const handleFilterChange = (newFilters: any) => {
+    const updatedFilters = { ...localFilters, ...newFilters }
+    setLocalFilters(updatedFilters)
+    setFilters(updatedFilters)
+  }
+
+  const handleTransactionTypeChange = (type: string, checked: boolean) => {
+    const updatedTypes = checked
+      ? [...localFilters.transactionType, type]
+      : localFilters.transactionType.filter((t) => t !== type)
+    handleFilterChange({ transactionType: updatedTypes })
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Logo />
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary">
-              Home
-            </Link>
-            <Link href="/properties" className="text-sm font-medium text-primary">
-              Properties
-            </Link>
-            <Link href="/swap-property" className="text-sm font-medium hover:text-primary">
-              Swap Property
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary">
-              About
-            </Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-primary">
-              Contact
-            </Link>
-            <Link href="/join-team" className="text-sm font-medium hover:text-primary">
-              Join Our Team
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="hidden md:flex">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button asChild className="hidden sm:flex md:flex">
-              <Link href="/properties">Browse Properties</Link>
-            </Button>
-            <Button asChild size="icon" className="sm:hidden">
-              <Link href="/properties">
-                <MapPin className="h-5 w-5" />
-                <span className="sr-only">Browse Properties</span>
-              </Link>
-            </Button>
-            <MobileMenu />
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="flex-1">
         <div className="container py-8">
           <div className="mb-8">
@@ -73,32 +72,53 @@ export default function PropertiesPage() {
                 <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                   <div className="py-4">
                     <h2 className="text-lg font-semibold mb-4">Filters</h2>
-                    {/* Mobile Filters - Same as desktop sidebar */}
                     <div className="space-y-6">
                       <div>
                         <label className="text-sm font-medium mb-2 block">Search</label>
                         <div className="relative">
                           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                          <Input type="search" placeholder="Search properties..." className="w-full pl-8" />
+                          <Input
+                            type="search"
+                            placeholder="Search properties..."
+                            className="w-full pl-8"
+                          />
                         </div>
                       </div>
                       <div>
                         <label className="text-sm font-medium mb-2 block">Transaction Type</label>
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="sale-mobile" />
+                            <Checkbox
+                              id="sale-mobile"
+                              checked={localFilters.transactionType.includes('sale')}
+                              onCheckedChange={(checked) =>
+                                handleTransactionTypeChange('sale', checked as boolean)
+                              }
+                            />
                             <label htmlFor="sale-mobile" className="text-sm">
                               For Sale
                             </label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="rent-mobile" />
+                            <Checkbox
+                              id="rent-mobile"
+                              checked={localFilters.transactionType.includes('rent')}
+                              onCheckedChange={(checked) =>
+                                handleTransactionTypeChange('rent', checked as boolean)
+                              }
+                            />
                             <label htmlFor="rent-mobile" className="text-sm">
                               For Rent
                             </label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="swap-mobile" />
+                            <Checkbox
+                              id="swap-mobile"
+                              checked={localFilters.transactionType.includes('swap')}
+                              onCheckedChange={(checked) =>
+                                handleTransactionTypeChange('swap', checked as boolean)
+                              }
+                            />
                             <label htmlFor="swap-mobile" className="text-sm">
                               For Swap
                             </label>
@@ -108,16 +128,27 @@ export default function PropertiesPage() {
                       <div>
                         <label className="text-sm font-medium mb-2 block">Price Range</label>
                         <div className="space-y-4">
-                          <Slider defaultValue={[0, 10000000]} min={0} max={20000000} step={100000} />
+                          <Slider
+                            defaultValue={[localFilters.minPrice, localFilters.maxPrice]}
+                            min={0}
+                            max={20000000}
+                            step={100000}
+                            onValueChange={([min, max]) =>
+                              handleFilterChange({ minPrice: min, maxPrice: max })
+                            }
+                          />
                           <div className="flex items-center justify-between">
-                            <span className="text-sm">R 0</span>
-                            <span className="text-sm">R 20M</span>
+                            <span className="text-sm">R {localFilters.minPrice}</span>
+                            <span className="text-sm">R {localFilters.maxPrice}</span>
                           </div>
                         </div>
                       </div>
                       <div>
                         <label className="text-sm font-medium mb-2 block">Location</label>
-                        <Select>
+                        <Select
+                          value={localFilters.city}
+                          onValueChange={(value) => handleFilterChange({ city: value })}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select location" />
                           </SelectTrigger>
@@ -129,12 +160,6 @@ export default function PropertiesPage() {
                             <SelectItem value="port-elizabeth">Port Elizabeth</SelectItem>
                           </SelectContent>
                         </Select>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button className="flex-1">Apply Filters</Button>
-                        <Button variant="outline" className="flex-1">
-                          Clear
-                        </Button>
                       </div>
                     </div>
                   </div>
@@ -150,14 +175,20 @@ export default function PropertiesPage() {
                   <span className="sr-only">List view</span>
                 </Button>
               </div>
-              <Select defaultValue="newest">
+              <Select
+                value={`${localFilters.sortBy}-${localFilters.sortOrder}`}
+                onValueChange={(value) => {
+                  const [sortBy, sortOrder] = value.split('-')
+                  handleFilterChange({ sortBy, sortOrder })
+                }}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="newest">Newest</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="createdAt-desc">Newest</SelectItem>
+                  <SelectItem value="price-asc">Price: Low to High</SelectItem>
+                  <SelectItem value="price-desc">Price: High to Low</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -170,26 +201,48 @@ export default function PropertiesPage() {
                   <h3 className="text-sm font-medium mb-2">Search</h3>
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Search properties..." className="w-full pl-8" />
+                    <Input
+                      type="search"
+                      placeholder="Search properties..."
+                      className="w-full pl-8"
+                    />
                   </div>
                 </div>
                 <div>
                   <h3 className="text-sm font-medium mb-2">Transaction Type</h3>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="sale" />
+                      <Checkbox
+                        id="sale"
+                        checked={localFilters.transactionType.includes('sale')}
+                        onCheckedChange={(checked) =>
+                          handleTransactionTypeChange('sale', checked as boolean)
+                        }
+                      />
                       <label htmlFor="sale" className="text-sm">
                         For Sale
                       </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="rent" />
+                      <Checkbox
+                        id="rent"
+                        checked={localFilters.transactionType.includes('rent')}
+                        onCheckedChange={(checked) =>
+                          handleTransactionTypeChange('rent', checked as boolean)
+                        }
+                      />
                       <label htmlFor="rent" className="text-sm">
                         For Rent
                       </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="swap" />
+                      <Checkbox
+                        id="swap"
+                        checked={localFilters.transactionType.includes('swap')}
+                        onCheckedChange={(checked) =>
+                          handleTransactionTypeChange('swap', checked as boolean)
+                        }
+                      />
                       <label htmlFor="swap" className="text-sm">
                         For Swap
                       </label>
@@ -199,16 +252,27 @@ export default function PropertiesPage() {
                 <div>
                   <h3 className="text-sm font-medium mb-2">Price Range</h3>
                   <div className="space-y-4">
-                    <Slider defaultValue={[0, 10000000]} min={0} max={20000000} step={100000} />
+                    <Slider
+                      defaultValue={[localFilters.minPrice, localFilters.maxPrice]}
+                      min={0}
+                      max={20000000}
+                      step={100000}
+                      onValueChange={([min, max]) =>
+                        handleFilterChange({ minPrice: min, maxPrice: max })
+                      }
+                    />
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">R 0</span>
-                      <span className="text-sm">R 20M</span>
+                      <span className="text-sm">R {localFilters.minPrice}</span>
+                      <span className="text-sm">R {localFilters.maxPrice}</span>
                     </div>
                   </div>
                 </div>
                 <div>
                   <h3 className="text-sm font-medium mb-2">Location</h3>
-                  <Select>
+                  <Select
+                    value={localFilters.city}
+                    onValueChange={(value) => handleFilterChange({ city: value })}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select location" />
                     </SelectTrigger>
@@ -222,8 +286,26 @@ export default function PropertiesPage() {
                   </Select>
                 </div>
                 <div className="flex gap-2">
-                  <Button className="flex-1">Apply Filters</Button>
-                  <Button variant="outline" className="flex-1">
+                  <Button className="flex-1" onClick={() => setFilters(localFilters)}>
+                    Apply Filters
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      setLocalFilters({
+                        transactionType: [],
+                        propertyType: '',
+                        city: '',
+                        minPrice: 0,
+                        maxPrice: 20000000,
+                        minBedrooms: 0,
+                        sortBy: 'createdAt',
+                        sortOrder: 'desc',
+                      })
+                      setFilters({})
+                    }}
+                  >
                     Clear
                   </Button>
                 </div>
@@ -231,101 +313,101 @@ export default function PropertiesPage() {
             </div>
             {/* Main Content */}
             <div className="flex-1">
-              <div className="mb-4">
-                <p className="text-sm text-muted-foreground">Showing 12 of 48 properties</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <PropertyCard
-                  title="Luxury Apartment in Cape Town"
-                  price="R 2,950,000"
-                  location="Cape Town, Western Cape"
-                  beds={2}
-                  baths={2}
-                  size="120 m²"
-                  image="/placeholder.svg?height=400&width=600"
-                  type="sale"
-                />
-                <PropertyCard
-                  title="Modern Family Home in Johannesburg"
-                  price="R 4,500,000"
-                  location="Sandton, Johannesburg"
-                  beds={4}
-                  baths={3}
-                  size="280 m²"
-                  image="/placeholder.svg?height=400&width=600"
-                  type="sale"
-                />
-                <PropertyCard
-                  title="Beachfront Villa in Durban"
-                  price="R 18,000 /month"
-                  location="Umhlanga, Durban"
-                  beds={3}
-                  baths={2}
-                  size="200 m²"
-                  image="/placeholder.svg?height=400&width=600"
-                  type="rent"
-                />
-                <PropertyCard
-                  title="Family Home for Swap"
-                  price="Swap Only"
-                  location="Rosebank, Johannesburg"
-                  beds={3}
-                  baths={2}
-                  size="180 m²"
-                  image="/placeholder.svg?height=400&width=600"
-                  type="swap"
-                />
-              </div>
-              <div className="mt-8 flex justify-center">
-                <nav className="flex items-center gap-1">
-                  <Button variant="outline" size="icon" disabled>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                    >
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                    <span className="sr-only">Previous page</span>
-                  </Button>
-                  <Button variant="outline" size="sm" className="bg-primary text-primary-foreground">
-                    1
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    2
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    3
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    4
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                    >
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                    <span className="sr-only">Next page</span>
-                  </Button>
-                </nav>
-              </div>
+              {isLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <p>Loading properties...</p>
+                </div>
+              ) : error ? (
+                <div className="flex justify-center items-center h-64">
+                  <p className="text-red-500">{error}</p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-4">
+                    <p className="text-sm text-muted-foreground">
+                      Showing {properties.length} properties
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {properties.map((property) => (
+                      <PropertyCard
+                        key={property.id}
+                        title={property.title}
+                        price={property.price.toString()}
+                        location={`${property.location.city}, ${property.location.province}`}
+                        beds={property.features.bedrooms}
+                        baths={property.features.bathrooms}
+                        size={`${property.features.size} m²`}
+                        image={property.images[0]?.image?.url || '/placeholder.svg'}
+                        type={property.transactionType}
+                      />
+                    ))}
+                  </div>
+                  {totalPages > 1 && (
+                    <div className="mt-8 flex justify-center">
+                      <nav className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          disabled={currentPage === 1}
+                          onClick={() => setPage(currentPage - 1)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-4 w-4"
+                          >
+                            <path d="m15 18-6-6 6-6" />
+                          </svg>
+                          <span className="sr-only">Previous page</span>
+                        </Button>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <Button
+                            key={page}
+                            variant="outline"
+                            size="sm"
+                            className={
+                              page === currentPage ? 'bg-primary text-primary-foreground' : ''
+                            }
+                            onClick={() => setPage(page)}
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          disabled={currentPage === totalPages}
+                          onClick={() => setPage(currentPage + 1)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-4 w-4"
+                          >
+                            <path d="m9 18 6-6-6-6" />
+                          </svg>
+                          <span className="sr-only">Next page</span>
+                        </Button>
+                      </nav>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

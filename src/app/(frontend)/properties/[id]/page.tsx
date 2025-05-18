@@ -1,68 +1,18 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Building, MapPin, Bed, Bath, Maximize, Phone, Mail, Share2, Heart } from "lucide-react"
+import Link from 'next/link'
+import Image from 'next/image'
+import { Building, MapPin, Bed, Bath, Maximize, Phone, Mail, Share2, Heart } from 'lucide-react'
 
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { PropertyCard } from "@/components/property-card"
-import { PropertyEnquiryForm } from "@/components/property-enquiry-form"
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent } from '@/components/ui/card'
+import { PropertyCard } from '@/components/property-card'
+import { PropertyEnquiryForm } from '@/components/property-enquiry-form'
+import Header from '@/components/Header'
 
 export default function PropertyDetailsPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <Building className="h-6 w-6" />
-            <span>Tendani Properties</span>
-          </Link>
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary">
-              Home
-            </Link>
-            <Link href="/properties" className="text-sm font-medium text-primary">
-              Properties
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary">
-              About
-            </Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-primary">
-              Contact
-            </Link>
-            <Link href="/join-team" className="text-sm font-medium hover:text-primary">
-              Join Our Team
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="hidden md:flex">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/properties">Browse Properties</Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6"
-              >
-                <line x1="4" x2="20" y1="12" y2="12" />
-                <line x1="4" x2="20" y1="6" y2="6" />
-                <line x1="4" x2="20" y1="18" y2="18" />
-              </svg>
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="flex-1">
         <div className="container py-8">
           <div className="mb-6">
@@ -158,7 +108,9 @@ export default function PropertyDetailsPage() {
               {/* Swap Details - Only shown for swap properties */}
               <div className="mb-8 p-4 border rounded-lg bg-muted/30">
                 <h2 className="text-xl font-bold mb-4">Swap Details</h2>
-                <p className="mb-2">This property is available for swap. The owner is looking for:</p>
+                <p className="mb-2">
+                  This property is available for swap. The owner is looking for:
+                </p>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>A 2-bedroom apartment in Cape Town</li>
                   <li>Preferably in the City Bowl or Atlantic Seaboard area</li>
@@ -182,23 +134,26 @@ export default function PropertyDetailsPage() {
                 <TabsContent value="description" className="pt-4">
                   <div className="space-y-4">
                     <p>
-                      This stunning luxury apartment in the heart of Sea Point offers breathtaking ocean views and
-                      modern living at its finest. Recently renovated with high-end finishes, this property represents
-                      the perfect blend of comfort, style, and location.
+                      This stunning luxury apartment in the heart of Sea Point offers breathtaking
+                      ocean views and modern living at its finest. Recently renovated with high-end
+                      finishes, this property represents the perfect blend of comfort, style, and
+                      location.
                     </p>
                     <p>
-                      The open-plan living area features floor-to-ceiling windows that flood the space with natural
-                      light and showcase the magnificent sea views. The designer kitchen comes fully equipped with
-                      premium appliances, stone countertops, and ample storage.
+                      The open-plan living area features floor-to-ceiling windows that flood the
+                      space with natural light and showcase the magnificent sea views. The designer
+                      kitchen comes fully equipped with premium appliances, stone countertops, and
+                      ample storage.
                     </p>
                     <p>
-                      Both bedrooms are generously sized with built-in wardrobes, and the master bedroom includes an
-                      en-suite bathroom with a walk-in shower. The second bathroom features a full bathtub and modern
-                      fixtures.
+                      Both bedrooms are generously sized with built-in wardrobes, and the master
+                      bedroom includes an en-suite bathroom with a walk-in shower. The second
+                      bathroom features a full bathtub and modern fixtures.
                     </p>
                     <p>
-                      Additional features include secure parking, 24-hour security, a communal pool, and easy access to
-                      Sea Point Promenade, restaurants, shops, and public transport.
+                      Additional features include secure parking, 24-hour security, a communal pool,
+                      and easy access to Sea Point Promenade, restaurants, shops, and public
+                      transport.
                     </p>
                   </div>
                 </TabsContent>
