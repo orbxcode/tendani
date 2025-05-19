@@ -1,7 +1,7 @@
 'use server'
 
 //import payload
-import { getPayload } from 'payload/dist/payload'
+import { CollectionSlug, getPayload } from 'payload'
 import config from '@payload-config'
 import { Property } from '@/app/(frontend)/properties/component/property-component'
 
@@ -22,7 +22,7 @@ export async function getProperties({
 
   try {
     const properties = await payload.find({
-      collection: 'properties',
+      collection: 'properties' as CollectionSlug,
       depth: 1,
       page,
       limit,
@@ -31,7 +31,7 @@ export async function getProperties({
     })
 
     return {
-      docs: properties.docs as Property[],
+      docs: properties.docs as unknown as Property[],
       totalPages: properties.totalPages || 1,
       page: properties.page || 1,
     }

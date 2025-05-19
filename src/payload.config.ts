@@ -45,7 +45,7 @@ export default buildConfig({
         },
       ],
     },
-    bundler: webpackBundler(),
+    
   },
 
   // database-adapter-config-start

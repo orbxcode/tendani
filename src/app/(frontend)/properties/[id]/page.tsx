@@ -14,6 +14,49 @@ import { getPropertyById, getProperties } from '../actions'
 import { Key } from 'react'
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react'
 
+export interface Property {
+  id: string
+  title: string
+  description: string
+  price: number
+  location: {
+    city: string
+    province: string
+    address: string
+    coordinates: {
+      latitude: number
+      longitude: number
+    }
+  }
+  propertyType: 'house' | 'apartment' | 'townhouse' | 'villa'
+  transactionType: 'sale' | 'rent' | 'swap'
+  features: {
+    bedrooms: number
+    bathrooms: number
+    size: number
+    parking: number
+  }
+  amenities: string[]
+  images: {
+    image: {
+      url: string
+    }
+    alt: string
+  }[]
+  status: 'available' | 'under-offer' | 'sold' | 'rented'
+  swapPreferences?: {
+    preferredLocations: {
+      city: string
+      province: string
+    }[]
+    preferredPropertyTypes: string[]
+    minBedrooms?: number
+    minBathrooms?: number
+    minSize?: number
+    additionalNotes?: string
+  }
+}
+
 interface PropertyPageProps {
   params: {
     id: string
@@ -21,14 +64,14 @@ interface PropertyPageProps {
 }
 
 export default async function PropertyDetailsPage({ params }: PropertyPageProps) {
-  const property = await getPropertyById(params.id)
+  const property = (await getPropertyById(params.id)) as unknown as Property
 
   if (!property) {
     notFound()
   }
 
   // Fetch similar properties
-  const { docs: similarProperties } = await getProperties({
+  const { docs: similarProperties } = (await getProperties({
     where: {
       and: [
         { id: { not_equals: property.id } },
@@ -37,7 +80,7 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
       ],
     },
     limit: 3,
-  })
+  })) as unknown as { docs: Property[] }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -234,43 +277,28 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
                 <div>
                   <h2 className="text-xl font-bold mb-4">Similar Properties</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {similarProperties.map(
-                      (similarProperty: {
-                        id: Key | null | undefined
-                        title: string
-                        price: string | number
-                        location: { city: any; province: any }
-                        features: {
-                          bedrooms: number
-                          bathrooms: number
-                          size: { toString: () => string }
+                    {similarProperties.map((similarProperty: Property) => (
+                      <PropertyCard
+                        key={similarProperty.id?.toString()}
+                        id={similarProperty.id?.toString()}
+                        title={similarProperty.title}
+                        price={similarProperty.price}
+                        location={`${similarProperty.location.city}, ${similarProperty.location.province}`}
+                        beds={similarProperty.features.bedrooms}
+                        baths={similarProperty.features.bathrooms}
+                        size={similarProperty.features.size.toString()}
+                        image={similarProperty.images[0]?.image?.url || '/placeholder.svg'}
+                        type={similarProperty.transactionType as 'sale' | 'rent' | 'swap'}
+                        status={
+                          similarProperty.status as
+                            | 'available'
+                            | 'under-offer'
+                            | 'sold'
+                            | 'rented'
+                            | undefined
                         }
-                        images: { image: { url: any } }[]
-                        transactionType: string
-                        status: string | undefined
-                      }) => (
-                        <PropertyCard
-                          key={similarProperty.id?.toString()?.toString()?.toString()}
-                          id={similarProperty.id?.toString()?.toString()?.toString()}
-                          title={similarProperty.title}
-                          price={similarProperty.price}
-                          location={`${similarProperty.location.city}, ${similarProperty.location.province}`}
-                          beds={similarProperty.features.bedrooms}
-                          baths={similarProperty.features.bathrooms}
-                          size={similarProperty.features.size.toString()}
-                          image={similarProperty.images[0]?.image?.url || '/placeholder.svg'}
-                          type={similarProperty.transactionType as 'sale' | 'rent' | 'swap'}
-                          status={
-                            similarProperty.status as
-                              | 'available'
-                              | 'under-offer'
-                              | 'sold'
-                              | 'rented'
-                              | undefined
-                          }
-                        />
-                      ),
-                    )}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
