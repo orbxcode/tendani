@@ -45,7 +45,6 @@ export default buildConfig({
         },
       ],
     },
-    
   },
 
   // database-adapter-config-start
@@ -53,15 +52,17 @@ export default buildConfig({
   // database-adapter-config-end
   collections: [Users, About, Media, Properties],
   cors: [getServerSideURL()].filter(Boolean),
-  plugins: [ vercelBlobStorage({
-    enabled: true, 
-    
-    collections: {
-      media: true,
-    },
-    
-  token: process.env.BLOB_READ_WRITE_TOKEN,
-  }),],
+  plugins: [
+    vercelBlobStorage({
+      enabled: true,
+
+      collections: {
+        media: true,
+      },
+
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+  ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   upload: {
