@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 import { withPayload } from '@payloadcms/next/withPayload'
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -17,9 +18,21 @@ const nextConfig = {
         }
       }),
     ],
+    webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+      }),
+    )
+    return config
+  },
   },
   reactStrictMode: true,
+  
   
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
+
+
+
