@@ -1,7 +1,7 @@
 //import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-import sharp from 'sharp' // sharp-import
+import sharp from 'sharp' 
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
@@ -48,7 +48,7 @@ export default buildConfig({
   },
 
   // database-adapter-config-start
-  db: vercelPostgresAdapter({
+  db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL,
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
