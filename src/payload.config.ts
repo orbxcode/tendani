@@ -48,7 +48,12 @@ export default buildConfig({
   },
 
   // database-adapter-config-start
-  db: vercelPostgresAdapter(),
+  db: vercelPostgresAdapter({
+    pool: {
+      connectionString: process.env.POSTGRES_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    },
+  }),
   // database-adapter-config-end
   collections: [Users, About, Media, Properties],
   cors: [getServerSideURL()].filter(Boolean),
