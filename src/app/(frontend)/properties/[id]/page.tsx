@@ -11,8 +11,6 @@ import { PropertyEnquiryForm } from '@/components/property-enquiry-form'
 import { PropertySwapDetails } from '@/components/property-swap-details'
 import Header from '@/components/Header'
 import { getPropertyById, getProperties } from '../actions'
-import { Key } from 'react'
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react'
 
 export interface Property {
   id: string
@@ -36,7 +34,7 @@ export interface Property {
     size: number
     parking: number
   }
-  amenities: string[]
+  amenities?: string[]
   images: {
     image: {
       url: string
@@ -64,24 +62,25 @@ interface PropertyPageProps {
 }
 
 export default async function PropertyDetailsPage({ params }: PropertyPageProps) {
-  const property = (await getPropertyById(params.id)) as unknown as Property
-
+  // Fetch property details
+  const property = await getPropertyById(params.id)
   if (!property) {
     notFound()
   }
 
   // Fetch similar properties
-  const { docs: similarProperties } = (await getProperties({
+  const { docs: similarProperties } = await getProperties({
     where: {
-      and: [
-        { id: { not_equals: property.id } },
+      AND: [
+        { id: { not: property.id } }, // Use 'not' instead of 'not_equals' for Prisma compatibility
         { propertyType: { equals: property.propertyType } },
         { transactionType: { equals: property.transactionType } },
       ],
     },
     limit: 3,
-  })) as unknown as { docs: Property[] }
+  })
 
+  // Utility function to format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
@@ -97,7 +96,7 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
         <div className="container py-8">
           <div className="mb-6">
             <Link href="/properties" className="text-sm text-muted-foreground hover:text-primary">
-              &larr; Back to Properties
+              ← Back to Properties
             </Link>
           </div>
 
@@ -113,26 +112,27 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {property.images
-                .slice(1, 5)
-                .map((img: { image: { url: any }; alt: any }, index: Key | null | undefined) => (
-                  <div key={index} className={`relative ${index === 3 ? 'group' : ''}`}>
-                    <Image
-                      src={img.image?.url || '/placeholder.svg'}
-                      alt={img.alt || `Property Image ${Number(index) + 2}`}
-                      width={400}
-                      height={300}
-                      className={`rounded-lg object-cover w-full h-[190px] ${
-                        index === 3 ? 'group-hover:brightness-50' : ''
-                      }`}
-                    />
-                    {index === 3 && property.images.length > 5 && (
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                        <Button variant="secondary">+{property.images.length - 5} More</Button>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              {property.images.slice(1, 5).map((img, index) => (
+                <div
+                  key={index}
+                  className={`relative ${index === 3 && property.images.length > 5 ? 'group' : ''}`}
+                >
+                  <Image
+                    src={img.image?.url || '/placeholder.svg'}
+                    alt={img.alt || `Property Image ${index + 2}`}
+                    width={400}
+                    height={300}
+                    className={`rounded-lg object-cover w-full h-[190px] ${
+                      index === 3 && property.images.length > 5 ? 'group-hover:brightness-50' : ''
+                    }`}
+                  />
+                  {index === 3 && property.images.length > 5 && (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <Button variant="secondary">+{property.images.length - 5} More</Button>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -196,59 +196,32 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
                   <TabsTrigger value="location">Location</TabsTrigger>
                 </TabsList>
                 <TabsContent value="description" className="pt-4">
-                  <div className="space-y-4">
-                    <p>{property.description}</p>
-                  </div>
+                  <div className="space-y-4">{property.description}</div>
                 </TabsContent>
                 <TabsContent value="features" className="pt-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-4">
                       <h3 className="font-semibold">Amenities</h3>
                       <ul className="space-y-2">
-                        {property.amenities.map(
-                          (
-                            amenity:
-                              | string
-                              | number
-                              | bigint
-                              | boolean
-                              | ReactElement<unknown, string | JSXElementConstructor<any>>
-                              | Iterable<ReactNode>
-                              | ReactPortal
-                              | Promise<
-                                  | string
-                                  | number
-                                  | bigint
-                                  | boolean
-                                  | ReactPortal
-                                  | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                  | Iterable<ReactNode>
-                                  | null
-                                  | undefined
-                                >
-                              | null
-                              | undefined,
-                            index: Key | null | undefined,
-                          ) => (
-                            <li key={index} className="flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="h-4 w-4 mr-2 text-primary"
-                              >
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                              {amenity}
-                            </li>
-                          ),
-                        )}
+                        {property.amenities?.map((amenity: string, index) => (
+                          <li key={index} className="flex items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="h-4 w-4 mr-2 text-primary"
+                            >
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            {amenity}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -277,10 +250,10 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
                 <div>
                   <h2 className="text-xl font-bold mb-4">Similar Properties</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {similarProperties.map((similarProperty: Property) => (
+                    {similarProperties.map((similarProperty) => (
                       <PropertyCard
-                        key={similarProperty.id?.toString()}
-                        id={similarProperty.id?.toString()}
+                        key={similarProperty.id}
+                        id={similarProperty.id}
                         title={similarProperty.title}
                         price={similarProperty.price}
                         location={`${similarProperty.location.city}, ${similarProperty.location.province}`}
@@ -288,15 +261,8 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
                         baths={similarProperty.features.bathrooms}
                         size={similarProperty.features.size.toString()}
                         image={similarProperty.images[0]?.image?.url || '/placeholder.svg'}
-                        type={similarProperty.transactionType as 'sale' | 'rent' | 'swap'}
-                        status={
-                          similarProperty.status as
-                            | 'available'
-                            | 'under-offer'
-                            | 'sold'
-                            | 'rented'
-                            | undefined
-                        }
+                        type={similarProperty.transactionType}
+                        status={similarProperty.status}
                       />
                     ))}
                   </div>
@@ -369,7 +335,7 @@ export default async function PropertyDetailsPage({ params }: PropertyPageProps)
               <span>Tendani Properties</span>
             </Link>
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Tendani Properties. All rights reserved.
+              © {new Date().getFullYear()} Tendani Properties. All rights reserved.
             </p>
           </div>
           <div className="flex gap-4">

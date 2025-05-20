@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from 'payload';
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -29,7 +29,6 @@ export const Properties: CollectionConfig = {
     {
       name: 'location',
       type: 'group',
-      required: true,
       fields: [
         {
           name: 'city',
@@ -88,7 +87,6 @@ export const Properties: CollectionConfig = {
     {
       name: 'features',
       type: 'group',
-      required: true,
       fields: [
         {
           name: 'bedrooms',
@@ -217,4 +215,4 @@ export const Properties: CollectionConfig = {
       ],
     },
   ],
-}
+};

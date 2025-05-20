@@ -1,6 +1,7 @@
+// app/properties/PropertiesClientWrapper.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { PropertiesComponent } from './property-component'
 import { Property } from './property-component'
 import { getProperties } from '../actions'
@@ -37,51 +38,31 @@ export function PropertiesClientWrapper({ initialData }: PropertiesClientWrapper
     try {
       const where: any = {}
 
-      // Add transaction type filter
       if (currentFilters.transactionType.length > 0) {
-        where.transactionType = {
-          in: currentFilters.transactionType,
-        }
+        where.transactionType = { in: currentFilters.transactionType }
       }
 
-      // Add property type filter
       if (currentFilters.propertyType !== 'all') {
-        where.propertyType = {
-          equals: currentFilters.propertyType,
-        }
+        where.propertyType = { equals: currentFilters.propertyType }
       }
 
-      // Add city filter
       if (currentFilters.city !== 'all') {
-        where['location.city'] = {
-          equals: currentFilters.city,
-        }
+        where['location.city'] = { equals: currentFilters.city }
       }
 
-      // Add price range filter
-      where.price = {
-        gte: currentFilters.minPrice,
-        lte: currentFilters.maxPrice,
-      }
+      where.price = { gte: currentFilters.minPrice, lte: currentFilters.maxPrice }
 
-      // Add bedrooms filter
       if (currentFilters.minBedrooms > 0) {
-        where['features.bedrooms'] = {
-          gte: currentFilters.minBedrooms,
-        }
+        where['features.bedrooms'] = { gte: currentFilters.minBedrooms }
       }
 
       const sort = `${currentFilters.sortOrder === 'desc' ? '-' : ''}${currentFilters.sortBy}`
 
-      const response = await getProperties({
-        page,
-        where,
-        sort,
-      })
+      const response = await getProperties({ page, where, sort })
 
-      setProperties(response.docs)
+      setProperties(response.docs as unknown as Property[])
       setTotalPages(response.totalPages)
-      setCurrentPage(response.page)
+      setCurrentPage(response.page ?? 1)
     } catch (err) {
       setError('Failed to fetch properties. Please try again.')
       console.error('Error fetching properties:', err)

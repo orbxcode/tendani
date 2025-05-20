@@ -44,3 +44,32 @@ export async function getProperties({
     }
   }
 }
+
+//get property by id
+export async function getPropertyById(id: string) {
+  const payload = await getPayload({ config })
+  const property = await payload.find({
+    collection: 'properties' as CollectionSlug,
+    depth: 1,
+    where: { id: { equals: id } },
+  })
+  return property.docs[0] as unknown as Property
+}
+
+//get similar properties
+export async function getSimilarProperties(property: Property) {
+  const payload = await getPayload({ config })
+  const similarProperties = await payload.find({
+    collection: 'properties' as CollectionSlug,
+    depth: 1,
+    where: {
+      AND: [
+        { id: { not_equals: property.id } },
+        { propertyType: { equals: property.propertyType } },
+        { transactionType: { equals: property.transactionType } },
+      ],
+    },
+    limit: 3,
+  })
+  return similarProperties.docs as unknown as Property[]
+}

@@ -1,84 +1,80 @@
-'use client'
+// app/properties/property-component.tsx
+'use client';
 
-import Link from 'next/link'
-import { Grid3X3, List, Search, SlidersHorizontal, MapPin } from 'lucide-react'
+import Link from 'next/link';
+import { Grid3X3, List, Search, SlidersHorizontal, MapPin } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Slider } from '@/components/ui/slider'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { PropertyCard } from '@/components/property-card'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { PropertySearch } from '@/components/property-search'
-import { Logo } from '@/components/logo'
-import Header from '@/components/Header'
+} from '@/components/ui/select';
+import { PropertyCard } from '@/components/property-card';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { PropertySearch } from '@/components/property-search';
+import { Logo } from '@/components/logo';
+import Header from '@/components/Header';
 
 interface PropertyImage {
-  id: string
-  image: {
-    url: string
-  }
-  alt: string
+  id: string;
+  image: { url: string };
+  alt: string;
 }
 
 interface PropertyLocation {
-  city: string
-  province: string
-  address: string
-  coordinates: {
-    latitude: number
-    longitude: number
-  }
+  city: string;
+  province: string;
+  address: string;
+  coordinates: { latitude: number; longitude: number };
 }
 
 interface PropertyFeatures {
-  bedrooms: number
-  bathrooms: number
-  size: number
-  parking: number
+  bedrooms: number;
+  bathrooms: number;
+  size: number;
+  parking: number;
 }
 
 export interface Property {
-  id: string
-  title: string
-  description: string
-  price: number
-  location: PropertyLocation
-  propertyType: 'house' | 'apartment' | 'townhouse' | 'villa'
-  transactionType: 'sale' | 'rent' | 'swap'
-  features: PropertyFeatures
-  amenities?: string[]
-  images: PropertyImage[]
-  status?: 'available' | 'under-offer' | 'sold' | 'rented'
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: PropertyLocation;
+  propertyType: 'house' | 'apartment' | 'townhouse' | 'villa';
+  transactionType: 'sale' | 'rent' | 'swap';
+  features: PropertyFeatures;
+  amenities?: string[];
+  images: PropertyImage[];
+  status?: 'available' | 'under-offer' | 'sold' | 'rented';
 }
 
 interface Filters {
-  transactionType: string[]
-  propertyType: string
-  city: string
-  minPrice: number
-  maxPrice: number
-  minBedrooms: number
-  sortBy: string
-  sortOrder: 'asc' | 'desc'
+  transactionType: string[];
+  propertyType: string;
+  city: string;
+  minPrice: number;
+  maxPrice: number;
+  minBedrooms: number;
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
 }
 
 interface PropertiesComponentProps {
-  properties: Property[]
-  totalPages: number
-  currentPage: number
-  isLoading: boolean
-  error: string | null
-  filters: Filters
-  onFilterChange: (newFilters: Partial<Filters>) => void
-  onPageChange: (page: number) => void
+  properties: Property[];
+  totalPages: number;
+  currentPage: number;
+  isLoading: boolean;
+  error: string | null;
+  filters: Filters;
+  onFilterChange: (newFilters: Partial<Filters>) => void;
+  onPageChange: (page: number) => void;
 }
 
 export function PropertiesComponent({
@@ -94,9 +90,9 @@ export function PropertiesComponent({
   const handleTransactionTypeChange = (type: string, checked: boolean) => {
     const updatedTypes = checked
       ? [...filters.transactionType, type]
-      : filters.transactionType.filter((t) => t !== type)
-    onFilterChange({ transactionType: updatedTypes })
-  }
+      : filters.transactionType.filter((t) => t !== type);
+    onFilterChange({ transactionType: updatedTypes });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -223,8 +219,8 @@ export function PropertiesComponent({
                 <Select
                   value={`${filters.sortBy}-${filters.sortOrder}`}
                   onValueChange={(value) => {
-                    const [sortBy, sortOrder] = value.split('-')
-                    onFilterChange({ sortBy, sortOrder: sortOrder as 'asc' | 'desc' })
+                    const [sortBy, sortOrder] = value.split('-');
+                    onFilterChange({ sortBy, sortOrder: sortOrder as 'asc' | 'desc' });
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
@@ -243,7 +239,6 @@ export function PropertiesComponent({
           </div>
 
           <div className="flex flex-col md:flex-row gap-6">
-            {/* Desktop Filters */}
             <div className="hidden md:block w-64 shrink-0">
               <div className="sticky top-24 border rounded-lg p-4 space-y-6">
                 <div>
@@ -346,14 +341,14 @@ export function PropertiesComponent({
                     onClick={() => {
                       onFilterChange({
                         transactionType: [],
-                        propertyType: '',
-                        city: '',
+                        propertyType: 'all',
+                        city: 'all',
                         minPrice: 0,
                         maxPrice: 20000000,
                         minBedrooms: 0,
                         sortBy: 'createdAt',
                         sortOrder: 'desc',
-                      })
+                      });
                     }}
                   >
                     Clear Filters
@@ -362,7 +357,6 @@ export function PropertiesComponent({
               </div>
             </div>
 
-            {/* Property Listings */}
             <div className="flex-1">
               {isLoading ? (
                 <div className="flex justify-center items-center h-64">
@@ -382,8 +376,8 @@ export function PropertiesComponent({
                       <Select
                         value={`${filters.sortBy}-${filters.sortOrder}`}
                         onValueChange={(value) => {
-                          const [sortBy, sortOrder] = value.split('-')
-                          onFilterChange({ sortBy, sortOrder: sortOrder as 'asc' | 'desc' })
+                          const [sortBy, sortOrder] = value.split('-');
+                          onFilterChange({ sortBy, sortOrder: sortOrder as 'asc' | 'desc' });
                         }}
                       >
                         <SelectTrigger className="w-[180px]">
@@ -454,15 +448,15 @@ export function PropertiesComponent({
                               <span className="sr-only">Previous page</span>
                             </Button>
                             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                              let pageNum
+                              let pageNum;
                               if (totalPages <= 5) {
-                                pageNum = i + 1
+                                pageNum = i + 1;
                               } else if (currentPage <= 3) {
-                                pageNum = i + 1
+                                pageNum = i + 1;
                               } else if (currentPage >= totalPages - 2) {
-                                pageNum = totalPages - 4 + i
+                                pageNum = totalPages - 4 + i;
                               } else {
-                                pageNum = currentPage - 2 + i
+                                pageNum = currentPage - 2 + i;
                               }
                               return (
                                 <Button
@@ -478,7 +472,7 @@ export function PropertiesComponent({
                                 >
                                   {pageNum}
                                 </Button>
-                              )
+                              );
                             })}
                             {totalPages > 5 && currentPage < totalPages - 2 && (
                               <span className="px-2">...</span>
@@ -530,7 +524,7 @@ export function PropertiesComponent({
           <div className="flex flex-col items-center gap-2 md:items-start">
             <Logo className="text-base" />
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Tendani Properties. All rights reserved.
+              © {new Date().getFullYear()} Tendani Properties. All rights reserved.
             </p>
           </div>
           <div className="flex gap-4">
@@ -550,5 +544,5 @@ export function PropertiesComponent({
         </div>
       </footer>
     </div>
-  )
+  );
 }
