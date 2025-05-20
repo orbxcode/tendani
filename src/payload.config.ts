@@ -1,10 +1,10 @@
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
-
+//import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -49,15 +49,19 @@ export default buildConfig({
   },
 
   // database-adapter-config-start
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI,
-    },
-  }),
+  db: vercelPostgresAdapter(),
   // database-adapter-config-end
   collections: [Users, About, Media, Properties],
   cors: [getServerSideURL()].filter(Boolean),
-  plugins: [],
+  plugins: [ vercelBlobStorage({
+    enabled: true, 
+    
+    collections: {
+      media: true,
+    },
+    
+  token: process.env.BLOB_READ_WRITE_TOKEN,
+  }),],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   upload: {
