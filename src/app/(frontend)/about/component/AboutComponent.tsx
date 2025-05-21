@@ -77,7 +77,7 @@ export default function AboutComponent({
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter">Our Experience</h2>
                 <p className="text-muted-foreground">
-                  Tendani's journey in the South African property market spans over two decades,
+                  Tendani&apos;s journey in the South African property market spans over two decades,
                   during which he has helped countless clients find their dream homes and make
                   successful property investments.
                 </p>
@@ -137,7 +137,7 @@ export default function AboutComponent({
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold tracking-tighter">Why Choose Tendani?</h2>
               <p className="text-muted-foreground mt-2 md:text-lg">
-                Here's why clients trust us with their property needs
+                Here&apos;s why clients trust us with their property needs
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -259,7 +259,7 @@ export default function AboutComponent({
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold tracking-tighter">What Our Clients Say</h2>
               <p className="text-muted-foreground mt-2 md:text-lg">
-                Don't just take our word for it - hear from our satisfied clients
+                Don&apos;t just take our word for it - hear from our satisfied clients
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -285,8 +285,8 @@ export default function AboutComponent({
                   Ready to Work With Us?
                 </h2>
                 <p className="max-w-[600px] md:text-xl">
-                  Whether you're looking to buy, sell, rent, or join our team, we're here to help
-                  you every step of the way.
+                  Whether you&apos;re looking to buy, sell, rent, or join our team, we&apos;re here
+                  to help you every step of the way.
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-4">

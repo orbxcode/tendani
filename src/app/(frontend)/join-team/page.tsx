@@ -80,7 +80,7 @@ export default function JoinTeamPage() {
               Join the Tendani Real Estate Team
             </h1>
             <p className="mx-auto mt-4 max-w-[700px] text-lg text-white/90 md:text-xl">
-              Build your career with South Africa's trusted property expert and unlock your potential in real estate.
+              Build your career with South Africa&apos;s trusted property expert and unlock your potential in real estate.
             </p>
             <div className="mt-8 flex justify-center">
               <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
@@ -166,7 +166,7 @@ export default function JoinTeamPage() {
                   <div className="rounded-full bg-primary/10 w-12 h-12 flex items-center justify-center mb-4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="24"
+                      width="24"        
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
@@ -181,7 +181,7 @@ export default function JoinTeamPage() {
                   </div>
                   <h3 className="text-xl font-bold">Established Brand</h3>
                   <p className="text-muted-foreground">
-                    Leverage Tendani's trusted reputation and established brand to build your client base more
+                    Leverage Tendani&apos;s trusted reputation and established brand to build your client base more
                     effectively.
                   </p>
                 </CardContent>
@@ -224,7 +224,7 @@ export default function JoinTeamPage() {
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
               <div className="space-y-4">
-                <h2 className="text-3xl font-bold tracking-tighter">Who We're Looking For</h2>
+                <h2 className="text-3xl font-bold tracking-tighter">Who We&apos;re Looking For</h2>
                 <p className="text-muted-foreground md:text-lg">
                   We welcome both experienced agents and newcomers with the right attitude and potential. The ideal
                   Tendani Properties team member possesses:
@@ -354,7 +354,7 @@ export default function JoinTeamPage() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Our Application Process</h2>
                 <p className="max-w-[700px] text-muted-foreground md:text-lg">
-                  Here's what to expect when you apply to join the Tendani Properties team
+                  Here&apos;s what to expect when you apply to join the Tendani Properties team
                 </p>
               </div>
             </div>
@@ -461,8 +461,8 @@ export default function JoinTeamPage() {
                     />
                     <div className="space-y-2">
                       <p className="text-muted-foreground italic">
-                        "Joining Tendani Properties was the best career decision I've made. The mentorship and support
-                        have been invaluable to my growth as an agent."
+                        Joining Tendani Properties was the best career decision I&apos;ve made. The mentorship and support
+                        have been invaluable to my growth as an agent.
                       </p>
                       <div>
                         <h4 className="font-bold">Thabo Molefe</h4>
