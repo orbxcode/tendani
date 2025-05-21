@@ -55,14 +55,12 @@ export interface Property {
   }
 }
 
-interface PropertyPageProps {
-  params: {
-    id: string
-  }
+type Props = {
+  params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function PropertyDetailsPage({ params, searchParams }: PropertyPageProps) {
+export default async function PropertyDetailsPage({ params, searchParams }: Props) {
   // Fetch property details
   const property = await getPropertyById(params.id)
   if (!property) {
