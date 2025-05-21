@@ -1,19 +1,16 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
-interface SwapPreferences {
-  preferredLocations: Array<{
-    city: string
-    province: string
-  }>
-  preferredPropertyTypes: string[]
-  minBedrooms?: number
-  minBathrooms?: number
-  minSize?: number
-  additionalNotes?: string
+export interface SwapPreferences {
+  preferredLocations?: { city: string; province: string; id?: string | null }[] | null
+  preferredPropertyTypes?: ('house' | 'apartment' | 'townhouse' | 'villa')[] | null
+  minBedrooms?: number | null
+  minBathrooms?: number | null
+  minSize?: number | null
+  additionalNotes?: string | null
 }
 
-interface PropertySwapDetailsProps {
+export interface PropertySwapDetailsProps {
   swapPreferences: SwapPreferences
 }
 
@@ -29,7 +26,7 @@ export function PropertySwapDetails({ swapPreferences }: PropertySwapDetailsProp
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Preferred Locations</h3>
         <ul className="list-disc pl-5 space-y-1">
-          {swapPreferences.preferredLocations.map((location, index) => (
+          {swapPreferences.preferredLocations?.map((location, index) => (
             <li key={index}>
               {location.city}, {location.province}
             </li>
@@ -41,7 +38,7 @@ export function PropertySwapDetails({ swapPreferences }: PropertySwapDetailsProp
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Preferred Property Types</h3>
         <div className="flex flex-wrap gap-2">
-          {swapPreferences.preferredPropertyTypes.map((type, index) => (
+          {swapPreferences.preferredPropertyTypes?.map((type, index) => (
             <span key={index} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </span>

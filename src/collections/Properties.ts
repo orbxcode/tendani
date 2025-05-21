@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -204,15 +204,13 @@ export const Properties: CollectionConfig = {
         {
           name: 'minSize',
           type: 'number',
-          label: 'Minimum Size (in square meters)',
           min: 0,
         },
         {
           name: 'additionalNotes',
           type: 'textarea',
-          label: 'Additional Requirements or Notes',
         },
       ],
     },
   ],
-};
+}

@@ -3,18 +3,19 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Bed, Bath, Maximize, MapPin } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
+import { Media } from '../payload-types'
 
-interface PropertyCardProps {
-  id?: string
+export interface PropertyCardProps {
+  id: string | number
   title: string
-  price: string | number
+  price: number
   location: string
   beds: number
   baths: number
   size: string
   image: string
   type: 'sale' | 'rent' | 'swap'
-  status?: 'available' | 'under-offer' | 'sold' | 'rented'
+  status?: 'available' | 'under-offer' | 'sold' | 'rented' | null
 }
 
 export function PropertyCard({

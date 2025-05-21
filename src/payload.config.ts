@@ -1,7 +1,7 @@
 //import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-import sharp from 'sharp' 
+import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
@@ -12,15 +12,15 @@ import { getServerSideURL } from './utilities/getURL'
 import { About } from './collections/About'
 import { Properties } from './collections/Properties'
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     components: {},
     importMap: {
-      baseDir: path.resolve(dirname),
+      baseDir: path.resolve(__dirname),
     },
     user: Users.slug,
     livePreview: {
@@ -76,7 +76,7 @@ export default buildConfig({
     },
   },
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
   jobs: {
     access: {

@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     about: About;
     media: Media;
+    properties: Property;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +80,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     about: AboutSelect<false> | AboutSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -192,7 +194,7 @@ export interface About {
  */
 export interface Media {
   id: number;
-  alt?: string | null;
+  alt: string;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -204,6 +206,82 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    feature?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties".
+ */
+export interface Property {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  location: {
+    city: string;
+    province: string;
+    address: string;
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  propertyType: 'house' | 'apartment' | 'townhouse' | 'villa';
+  transactionType: 'sale' | 'rent' | 'swap';
+  features: {
+    bedrooms: number;
+    bathrooms: number;
+    size: number;
+    parking: number;
+  };
+  amenities?: ('pool' | 'garden' | 'security' | 'garage' | 'air-conditioning' | 'furnished')[] | null;
+  images: {
+    image: number | Media;
+    alt: string;
+    id?: string | null;
+  }[];
+  status?: ('available' | 'under-offer' | 'sold' | 'rented') | null;
+  swapPreferences?: {
+    preferredLocations?:
+      | {
+          city: string;
+          province: string;
+          id?: string | null;
+        }[]
+      | null;
+    preferredPropertyTypes?: ('house' | 'apartment' | 'townhouse' | 'villa')[] | null;
+    minBedrooms?: number | null;
+    minBathrooms?: number | null;
+    minSize?: number | null;
+    additionalNotes?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -223,6 +301,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'properties';
+        value: number | Property;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -323,6 +405,99 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        feature?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties_select".
+ */
+export interface PropertiesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  price?: T;
+  location?:
+    | T
+    | {
+        city?: T;
+        province?: T;
+        address?: T;
+        coordinates?:
+          | T
+          | {
+              latitude?: T;
+              longitude?: T;
+            };
+      };
+  propertyType?: T;
+  transactionType?: T;
+  features?:
+    | T
+    | {
+        bedrooms?: T;
+        bathrooms?: T;
+        size?: T;
+        parking?: T;
+      };
+  amenities?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  status?: T;
+  swapPreferences?:
+    | T
+    | {
+        preferredLocations?:
+          | T
+          | {
+              city?: T;
+              province?: T;
+              id?: T;
+            };
+        preferredPropertyTypes?: T;
+        minBedrooms?: T;
+        minBathrooms?: T;
+        minSize?: T;
+        additionalNotes?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

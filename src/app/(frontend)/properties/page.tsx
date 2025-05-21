@@ -1,12 +1,12 @@
 // app/properties/page.tsx
-import { getProperties } from './actions';
-import { PropertiesClientWrapper } from './component/properties-client-wrapper';
-import { Property } from './component/property-component';
+import { getProperties } from './actions'
+import { PropertiesClientWrapper } from './component/properties-client-wrapper'
+import { Property } from '@/payload-types'
 
 interface InitialData {
-  docs: Property[];
-  totalPages: number;
-  page: number;
+  docs: Property[]
+  totalPages: number
+  page: number
 }
 
 export default async function PropertiesPage() {
@@ -14,7 +14,7 @@ export default async function PropertiesPage() {
     page: 1,
     where: {},
     sort: '-createdAt',
-  });
+  })
 
-  return <PropertiesClientWrapper initialData={initialData} />;
+  return <PropertiesClientWrapper initialData={initialData} />
 }
