@@ -41,7 +41,7 @@ export interface Property {
     }
     alt: string
   }[]
-  status: 'available' | 'under-offer' | 'sold' | 'rented'
+  status?: 'available' | 'under-offer' | 'sold' | 'rented'
   swapPreferences?: {
     preferredLocations: {
       city: string
@@ -58,6 +58,22 @@ export interface Property {
 type Props = {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+// Add this type guard function after the Property interface
+function transformPropertyForCard(property: Property) {
+  return {
+    id: property.id,
+    title: property.title,
+    price: property.price,
+    location: `${property.location.city}, ${property.location.province}`,
+    beds: property.features.bedrooms,
+    baths: property.features.bathrooms,
+    size: property.features.size.toString(),
+    image: property.images[0]?.image?.url || '/placeholder.svg',
+    type: property.transactionType,
+    status: property.status,
+  }
 }
 
 export default async function PropertyDetailsPage({ params, searchParams }: Props) {
@@ -255,16 +271,7 @@ export default async function PropertyDetailsPage({ params, searchParams }: Prop
                     {similarProperties.map((similarProperty) => (
                       <PropertyCard
                         key={similarProperty.id}
-                        id={similarProperty.id}
-                        title={similarProperty.title}
-                        price={similarProperty.price}
-                        location={`${similarProperty.location.city}, ${similarProperty.location.province}`}
-                        beds={similarProperty.features.bedrooms}
-                        baths={similarProperty.features.bathrooms}
-                        size={similarProperty.features.size.toString()}
-                        image={similarProperty.images[0]?.image?.url || '/placeholder.svg'}
-                        type={similarProperty.transactionType}
-                        status={similarProperty.status}
+                        {...transformPropertyForCard(similarProperty)}
                       />
                     ))}
                   </div>
