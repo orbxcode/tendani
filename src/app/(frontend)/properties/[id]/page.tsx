@@ -72,7 +72,7 @@ function transformPropertyForCard(property: Property) {
     size: property.features.size.toString(),
     image: property.images[0]?.image?.url || '/placeholder.svg',
     type: property.transactionType,
-    status: property.status,
+    status: property.status || 'available',
   }
 }
 
