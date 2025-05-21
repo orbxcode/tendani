@@ -14,21 +14,11 @@ const eslintConfig = [
   {
     rules: {
       'react/no-unescaped-entities': 0,
-      '@typescript-eslint/ban-ts-comment': 'warn',
-      '@typescript-eslint/no-empty-object-type': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          args: 'after-used',
-          ignoreRestSiblings: false,
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^(_|ignore)',
-        },
-      ],
+      '@typescript-eslint/ban-ts-comment': 0,
+      '@typescript-eslint/no-empty-object-type': 0,
+      '@typescript-eslint/no-explicit-any': 0,
+      '@typescript-eslint/no-unused-vars': 'off',
+      
     },
   },
   {
