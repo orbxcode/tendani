@@ -1,17 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, MapPin } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PropertyCard } from '@/components/property-card'
 import { TestimonialCard } from '@/components/testimonial-card'
-import { MobileMenu } from '@/components/mobile-menu'
 import { PropertySearch } from '@/components/property-search'
-import { Logo } from '@/components/logo'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { getProperties } from './properties/actions'
+import { transformPropertyForCard } from '@/lib/property-utils'
 import { Key } from 'react'
 
 async function getFeaturedProperties(type?: string) {
@@ -40,6 +39,7 @@ export default async function HomePage() {
   const allProperties = await getFeaturedProperties()
   const saleProperties = await getFeaturedProperties('sale')
   const rentProperties = await getFeaturedProperties('rent')
+  const swapProperties = await getFeaturedProperties('swap')
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -146,62 +146,34 @@ export default async function HomePage() {
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="sale">For Sale</TabsTrigger>
                   <TabsTrigger value="rent">For Rent</TabsTrigger>
+                  <TabsTrigger value="swap">For Swap</TabsTrigger>
                 </TabsList>
               </div>
               <TabsContent value="all" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {allProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
-                    <PropertyCard
-                      key={property.id?.toString()}
-                      id={property.id?.toString()}
-                      title={property.title}
-                      price={property.price}
-                      location={`${property.location.city}, ${property.location.province}`}
-                      beds={property.features.bedrooms}
-                      baths={property.features.bathrooms}
-                      size={property.features.size.toString()}
-                      image={property.images[0]?.image?.url || '/placeholder.svg'} 
-                      type={property.transactionType as "sale" | "rent" | "swap"}
-                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
-                    />
+                  {allProperties.map((property) => (
+                    <PropertyCard key={property.id} {...transformPropertyForCard(property)} />
                   ))}
                 </div>
               </TabsContent>
               <TabsContent value="sale" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {saleProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
-                    <PropertyCard
-                      key={property.id?.toString()?.toString()?.toString()}
-                      id={property.id?.toString()?.toString()?.toString()}
-                      title={property.title}
-                      price={property.price}
-                      location={`${property.location.city}, ${property.location.province}`}
-                      beds={property.features.bedrooms}
-                      baths={property.features.bathrooms}
-                      size={property.features.size.toString()}
-                      image={property.images[0]?.image?.url || '/placeholder.svg'}
-                      type={property.transactionType as "sale" | "rent" | "swap"}
-                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
-                    />
+                  {saleProperties.map((property) => (
+                    <PropertyCard key={property.id} {...transformPropertyForCard(property)} />
                   ))}
                 </div>
               </TabsContent>
               <TabsContent value="rent" className="mt-6">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {rentProperties.map((property: { id: Key | null | undefined; title: string; price: string | number; location: { city: any; province: any }; features: { bedrooms: number; bathrooms: number; size: { toString: () => string } }; images: { image: { url: any } }[]; transactionType: string; status: string | undefined }) => (
-                    <PropertyCard
-                      key={property.id?.toString()?.toString()?.toString()}
-                      id={property.id?.toString()?.toString()?.toString()}
-                      title={property.title}
-                      price={property.price}
-                      location={`${property.location.city}, ${property.location.province}`}
-                      beds={property.features.bedrooms}
-                      baths={property.features.bathrooms}
-                      size={property.features.size.toString()}
-                      image={property.images[0]?.image?.url || '/placeholder.svg'}
-                      type={property.transactionType as "sale" | "rent" | "swap"}
-                      status={property.status as "available" | "under-offer" | "sold" | "rented" | undefined}
-                    />
+                  {rentProperties.map((property) => (
+                    <PropertyCard key={property.id} {...transformPropertyForCard(property)} />
+                  ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="swap" className="mt-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {swapProperties.map((property) => (
+                    <PropertyCard key={property.id} {...transformPropertyForCard(property)} />
                   ))}
                 </div>
               </TabsContent>

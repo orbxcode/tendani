@@ -11,6 +11,7 @@ import { PropertyEnquiryForm } from '@/components/property-enquiry-form'
 import { PropertySwapDetails } from '@/components/property-swap-details'
 import Header from '@/components/Header'
 import { getPropertyById, getProperties } from '../actions'
+import { transformPropertyForCard } from '@/lib/property-utils'
 
 export interface Property {
   id: string
@@ -58,22 +59,6 @@ export interface Property {
 type Props = {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-// Add this type guard function after the Property interface
-function transformPropertyForCard(property: Property) {
-  return {
-    id: property.id,
-    title: property.title,
-    price: property.price,
-    location: `${property.location.city}, ${property.location.province}`,
-    beds: property.features.bedrooms,
-    baths: property.features.bathrooms,
-    size: property.features.size.toString(),
-    image: property.images[0]?.image?.url || '/placeholder.svg',
-    type: property.transactionType,
-    status: property.status || 'available',
-  }
 }
 
 export default async function PropertyDetailsPage({ params, searchParams }: Props) {
