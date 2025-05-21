@@ -57,12 +57,12 @@ export interface Property {
 
 type Props = {
   params: Promise<{ id: string }>
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function PropertyDetailsPage({ params, searchParams }: Props) {
-  // Await params to get the id
-  const { id } = await params
+  // Await both params and searchParams
+  const [{ id }, queryParams] = await Promise.all([params, searchParams])
 
   // Fetch property details
   const property = await getPropertyById(id)
