@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Building, MapPin, Bed, Bath, Maximize, Phone, Mail, Share2, Heart } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { Property as PayloadProperty, Media } from '../../../../payload-types'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -64,19 +63,13 @@ export default async function PropertyDetailsPage({ params, searchParams }: Prop
           {/* Property Image Gallery */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="md:col-span-2">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-                <Image
-                  src={
-                    typeof property.images[0]?.image === 'object' && property.images[0].image.url
-                      ? property.images[0].image.url
-                      : '/placeholder.svg'
-                  }
-                  alt={property.images[0]?.alt || property.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+              <Image
+                src={property.images[0]?.image?.url || '/placeholder.svg'}
+                alt={property.images[0]?.alt || property.title}
+                width={1000}
+                height={600}
+                className="rounded-lg object-cover w-full h-[400px]"
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               {property.images.slice(1, 5).map((img, index) => (
@@ -84,20 +77,15 @@ export default async function PropertyDetailsPage({ params, searchParams }: Prop
                   key={index}
                   className={`relative ${index === 3 && property.images.length > 5 ? 'group' : ''}`}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-                    <Image
-                      src={
-                        typeof img.image === 'object' && img.image.url
-                          ? img.image.url
-                          : '/placeholder.svg'
-                      }
-                      alt={img.alt || `Property Image ${index + 2}`}
-                      fill
-                      className={`object-cover ${
-                        index === 3 && property.images.length > 5 ? 'group-hover:brightness-50' : ''
-                      }`}
-                    />
-                  </div>
+                  <Image
+                    src={img.image?.url || '/placeholder.svg'}
+                    alt={img.alt || `Property Image ${index + 2}`}
+                    width={400}
+                    height={300}
+                    className={`rounded-lg object-cover w-full h-[190px] ${
+                      index === 3 && property.images.length > 5 ? 'group-hover:brightness-50' : ''
+                    }`}
+                  />
                   {index === 3 && property.images.length > 5 && (
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <Button variant="secondary">+{property.images.length - 5} More</Button>
