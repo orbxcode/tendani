@@ -26,10 +26,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
+         <InitTheme  />
         <Providers >
          
 
-          <InitTheme />
+         
           {children}
       
         </Providers>

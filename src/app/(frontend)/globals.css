@@ -10,68 +10,69 @@
   }
 
   :root {
-    /* Core Brand Colors - Professional & Trustworthy */
-    --background: 0 0% 100%; /* Pure white for cleanliness */
-    --foreground: 210 12% 16%; /* Dark slate for readability */
+    /* Core Brand Colors - Ethereal & Captivating */
+    --background: 200 30% 98%; /* Soft celestial blue-white for a serene canvas */
+    --foreground: 220 20% 10%; /* Deep indigo for rich contrast and readability */
 
-    /* Primary - Authority (Deep Navy) */
-    --primary: 216 71% 23%; 
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Majestic Presence (Velvet Sapphire) */
+    --primary: 230 70% 35%; /* Lush sapphire with a regal depth */
+    --primary-foreground: 180 20% 95%; /* Soft cyan-white for crisp text */
 
-    /* Secondary - Trust (Warm Gold Accent) */
-    --secondary: 38 92% 50%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Warm Elegance (Sunlit Amber) */
+    --secondary: 40 80% 60%; /* Radiant amber with a golden glow */
+    --secondary-foreground: 220 20% 10%; /* Deep indigo for contrast */
 
-    /* Property Highlight Colors */
-    --success: 160 84% 39%; /* Emerald green for "available" states */
-    --warning: 32 95% 44%; /* Amber for "pending" */
-    --error: 349 86% 55%; /* Coral for "sold" */
+    /* Property Highlight Colors - Inspired by Nature */
+    --success: 160 60% 45%; /* Lush jade green for vitality and availability */
+    --warning: 25 85% 55%; /* Warm sunset orange for pending states */
+    --error: 350 70% 60%; /* Vibrant ruby for sold states, evoking passion */
 
-    /* UI Elements */
-    --card: 0 0% 98%; /* Soft off-white for cards */
+    /* UI Elements - Refined and Polished */
+    --card: 200 25% 95%; /* Subtle blue-tinted off-white for cards */
     --card-foreground: var(--foreground);
-    --popover: var(--card);
+    --popover: 200 20% 93%; /* Slightly deeper for popovers */
     --popover-foreground: var(--foreground);
-    --muted: 210 17% 95%; /* Ultra-light gray */
-    --muted-foreground: 210 6% 45%;
-    --accent: var(--secondary);
+    --muted: 200 15% 90%; /* Misty blue-gray for soft backgrounds */
+    --muted-foreground: 220 10% 40%; /* Muted indigo for secondary text */
+    --accent: 40 70% 70%; /* Brighter amber accent for highlights */
     --accent-foreground: var(--secondary-foreground);
     --destructive: var(--error);
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 180 20% 95%;
 
     /* Functional Colors */
-    --border: 210 14% 89%; /* Soft borders */
-    --input: 0 0% 100%; /* Crisp white inputs */
-    --ring: 216 71% 23% / 0.2; /* Subtle focus rings */
+    --border: 200 20% 85% / 0.7; /* Soft misty border with translucency */
+    --input: 200 15% 98%; /* Crisp, clean input fields */
+    --ring: 230 70% 35% / 0.3; /* Subtle sapphire glow for focus states */
 
-    --radius: 0.5rem; /* Modern rounded corners */
+    --radius: 0.75rem; /* Slightly softer, modern rounded corners */
   }
 
   [data-theme='dark'] {
-    /* Dark Mode - Luxurious Night Look */
-    --background: 210 12% 8%; /* Deep slate */
-    --foreground: 0 0% 98%; /* Soft white */
+    /* Dark Mode - Cosmic Luxe */
+    --background: 220 25% 7%; /* Deep cosmic navy for a luxurious night sky */
+    --foreground: 200 20% 95%; /* Soft moonlight white for readability */
 
-    --primary: 210 40% 98%; /* Light primary */
-    --primary-foreground: 216 71% 23%;
+    --primary: 230 60% 85%; /* Luminous sapphire for a glowing primary */
+    --primary-foreground: 220 25% 10%; /* Dark indigo for contrast */
 
-    --secondary: 38 92% 50%; /* Gold stays vibrant */
-    --secondary-foreground: 210 12% 8%;
+    --secondary: 40 80% 65%; /* Warm amber, slightly brighter for vibrancy */
+    --secondary-foreground: 220 25% 7%; /* Matches dark background */
 
-    --card: 210 12% 12%; /* Slightly lighter than bg */
+    --card: 220 20% 12%; /* Slightly lighter cosmic navy for cards */
     --card-foreground: var(--foreground);
-    --popover: var(--card);
-    
-    --muted: 210 12% 18%;
-    --muted-foreground: 210 10% 70%;
-    
-    --border: 210 12% 20% / 0.8;
-    --input: 210 12% 15%;
-    
+    --popover: 220 18% 10%; /* Deep popover with a starry depth */
+    --popover-foreground: var(--foreground);
+    --muted: 220 15% 20%; /* Darker muted tone for subtle elements */
+    --muted-foreground: 200 10% 70%; /* Light gray-blue for secondary text */
+
+    --border: 220 20% 25% / 0.6; /* Subtle starry border */
+    --input: 220 15% 15%; /* Dark, clean input fields */
+    --ring: 230 60% 85% / 0.4; /* Luminous sapphire ring for focus */
+
     /* Dark mode property states */
-    --success: 160 84% 39%;
-    --warning: 32 95% 60%; /* Brighter in dark mode */
-    --error: 349 86% 65%;
+    --success: 160 55% 50%; /* Brighter jade for visibility */
+    --warning: 25 80% 65%; /* Vivid sunset orange */
+    --error: 350 65% 70%; /* Bright ruby for emphasis */
   }
 }
 
@@ -81,17 +82,27 @@
   }
   body {
     @apply bg-background text-foreground min-h-screen flex flex-col;
-    font-feature-settings: "rlig" 1, "calt" 1; /* Better typography */
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1; /* Enhanced typography */
   }
 }
 
-/* Smooth theme transition */
+/* Smooth theme transition with a celestial fade */
 html {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease-in-out, background-color 0.4s ease-in-out;
 }
 
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: 1;
+}
+
+/* Gradient utility for buttons or highlights */
+@layer utilities {
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+  .bg-gradient-card {
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+  }
 }
